@@ -10,7 +10,7 @@ import SwiftUI
 struct CardItem: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            VStack(alignment: .leading,spacing: 10) {
+            VStack(alignment: .leading, spacing: 5) {
                 
                 Spacer()
                 
@@ -26,7 +26,7 @@ struct CardItem: View {
                     .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("Cappucino")
                         .font(.headline)
                         .fontWeight(.bold)
@@ -45,7 +45,7 @@ struct CardItem: View {
                             .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
                     }
                 }
-                .padding(.top, 10)
+                .padding(.top, 8)
             }
             
             VStack {
@@ -62,10 +62,10 @@ struct CardItem: View {
         }
         .padding(.horizontal)
         .padding(.vertical, 25)
-        .frame(width: 240, height: 370)
+        .frame(width: 240, height: 350)
         .background(Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)))
         .clipShape(RoundedRectangle(cornerRadius: 30.0, style: .continuous))
-        .shadow(color: Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 10)
+        .shadow(color: Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)).opacity(0.3), radius: 15, x: 0.0, y: 3)
     }
 }
 

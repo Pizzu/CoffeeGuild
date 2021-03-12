@@ -56,7 +56,7 @@ struct CardItemSmall: View {
         .padding()
         .frame(height: 100)
         .background(Color.white)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 10)
     }
 }

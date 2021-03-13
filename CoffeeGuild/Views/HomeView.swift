@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeView: View {
     
     @State private var showDetailView : Bool = false
+    @State private var showProfileView : Bool = false
+    @State private var showCartView : Bool = false
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
@@ -28,9 +30,41 @@ struct HomeView: View {
     var content : some View {
             ScrollView {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 32.0) {
-                        ForEach(0 ..< 3) { item in
-                            CardItem()
+                    HStack(spacing: 20.0) {
+                        Text("Hot Coffee")
+                            .font(.footnote)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)))
+                        
+                        Text("Cold Coffee")
+                            .font(.footnote)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(#colorLiteral(red: 0.6941176471, green: 0.5568627451, blue: 0.5019607843, alpha: 1)))
+                        
+                        Text("Cappuccino")
+                            .font(.footnote)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(#colorLiteral(red: 0.6941176471, green: 0.5568627451, blue: 0.5019607843, alpha: 1)))
+                        
+                        Text("Chocolate")
+                            .font(.footnote)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color(#colorLiteral(red: 0.6941176471, green: 0.5568627451, blue: 0.5019607843, alpha: 1)))
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                }
+                
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 15.0) {
+                        ForEach(0 ..< 4) { item in
+                            GeometryReader { geometry in
+                                CardItem()
+                                    .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
+                                    .animation(.spring(response: 0.4, dampingFraction: 0.6))
+                            }
+                            .frame(width: 240, height: 350)
                         }
                     }
                     .padding(.horizontal)
@@ -64,7 +98,9 @@ struct HomeView: View {
             .navigationBarItems(
                 trailing:
                     HStack(spacing: 8) {
-                        Button(action: {}) {
+                        Button(action: {
+                            self.showProfileView = true
+                        }) {
                             Image("Avatar1")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
@@ -72,8 +108,13 @@ struct HomeView: View {
                                 .clipShape(Circle())
                                 .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 0)
                         }
+                        .sheet(isPresented: self.$showProfileView, content: {
+                           ProfileView()
+                        })
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            self.showCartView = true
+                        }) {
                             VStack {
                                 Image(systemName: "bag")
                                     .font(.headline)
@@ -85,6 +126,9 @@ struct HomeView: View {
                             .clipShape(Circle())
                             .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 0)
                         }
+                        .sheet(isPresented: self.$showCartView, content: {
+                            CartView()
+                        })
                     }
             )
         

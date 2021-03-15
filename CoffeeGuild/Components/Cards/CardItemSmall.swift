@@ -47,7 +47,7 @@ struct CardItemSmall: View {
                             .frame(width: 25, height: 25)
                     }
                     
-                    .background(Color(#colorLiteral(red: 0.5019607843, green: 0.3019607843, blue: 0.2156862745, alpha: 1)))
+                    .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                     .clipShape(Circle())
                 }
             }

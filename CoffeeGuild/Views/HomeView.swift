@@ -34,22 +34,22 @@ struct HomeView: View {
                         Text("Hot Coffee")
                             .font(.footnote)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)))
+                            .foregroundColor(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                         
                         Text("Cold Coffee")
                             .font(.footnote)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color(#colorLiteral(red: 0.6941176471, green: 0.5568627451, blue: 0.5019607843, alpha: 1)))
+                            .foregroundColor(Color(#colorLiteral(red: 0.737254902, green: 0.5647058824, blue: 0.4156862745, alpha: 1)))
                         
                         Text("Cappuccino")
                             .font(.footnote)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color(#colorLiteral(red: 0.6941176471, green: 0.5568627451, blue: 0.5019607843, alpha: 1)))
+                            .foregroundColor(Color(#colorLiteral(red: 0.737254902, green: 0.5647058824, blue: 0.4156862745, alpha: 1)))
                         
                         Text("Chocolate")
                             .font(.footnote)
                             .fontWeight(.semibold)
-                            .foregroundColor(Color(#colorLiteral(red: 0.6941176471, green: 0.5568627451, blue: 0.5019607843, alpha: 1)))
+                            .foregroundColor(Color(#colorLiteral(red: 0.737254902, green: 0.5647058824, blue: 0.4156862745, alpha: 1)))
                     }
                     .padding(.horizontal)
                     .padding(.top, 20)
@@ -76,10 +76,10 @@ struct HomeView: View {
                     Text("Popular")
                         .font(.title2)
                         .bold()
-                        .foregroundColor(Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)))
+                        .foregroundColor(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 16)], spacing: 16) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
                         ForEach(0 ..< 6) { item in
                             CardItemSmall()
                                 .onTapGesture {

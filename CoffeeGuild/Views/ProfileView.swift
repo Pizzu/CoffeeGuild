@@ -11,6 +11,10 @@ struct ProfileView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    init() {
+        UITableView.appearance().backgroundColor = .white
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -28,6 +32,7 @@ struct ProfileView: View {
                     Text("Row 3")
                 }
             }
+            
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Profile")
             .navigationBarItems(

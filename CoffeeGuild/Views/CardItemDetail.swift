@@ -11,9 +11,7 @@ struct CardItemDetail: View {
     
     var body: some View {
         ZStack {
-            
-            Color(#colorLiteral(red: 0.8980392157, green: 0.8980392157, blue: 0.8980392157, alpha: 1)).ignoresSafeArea()
-                        
+            Color.white.ignoresSafeArea()
             content
         }
     }
@@ -32,7 +30,7 @@ struct CardItemDetail: View {
                     }
                     .frame(maxWidth:.infinity)
                     .frame(height: 350)
-                    .background(Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)))
+                    .background(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)), Color(#colorLiteral(red: 0.737254902, green: 0.5647058824, blue: 0.4156862745, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing))
                 }
                 
                 VStack(spacing: 20.0) {
@@ -119,7 +117,7 @@ struct CardItemDetail: View {
                     Text("3")
                         .font(.headline)
                         .fontWeight(.semibold)
-                        .foregroundColor(Color(#colorLiteral(red: 0.5019607843, green: 0.3019607843, blue: 0.2156862745, alpha: 1)))
+                        .foregroundColor(Color.white)
                     
                     Spacer()
                     
@@ -130,7 +128,7 @@ struct CardItemDetail: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
                 .frame(width: 150)
-                .background(Color.white)
+                .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                 .clipShape(RoundedRectangle(cornerRadius: 25.0, style: .continuous))
                 
                 Button(action: {}) {
@@ -141,9 +139,9 @@ struct CardItemDetail: View {
                 }
                 .padding(12)
                 .padding(.horizontal, 40)
-                .background(Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)))
+                .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                .shadow(color: Color(#colorLiteral(red: 0.6588235294, green: 0.3568627451, blue: 0.2352941176, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
+                .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
                 
             }
             

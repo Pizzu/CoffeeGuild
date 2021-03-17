@@ -6,14 +6,39 @@
 //
 
 import SwiftUI
+import SwiftUIX
 
 struct SignInView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
+    @EnvironmentObject var userStore : UserStore
+    
     @State private var email : String = ""
     @State private var password : String = ""
     @State var isFocus : Bool = false
+    @State var isLoading : Bool = false
+    @State var showAlert : Bool = false
+    @State var alertMessage : String = ""
+    
+    private func signIn() {
+        self.isFocus = false
+        self.isLoading = true
+        
+        self.userStore.signinUser(email: self.email, password: self.password) { (response) in
+            self.isLoading = false
+            if response.errorMessage != nil {
+                self.alertMessage = response.errorMessage!
+                self.showAlert = true
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.email = ""
+                    self.password = ""
+                    self.userStore.getCurrentUser()
+                }
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -95,7 +120,9 @@ struct SignInView: View {
                 .padding(.horizontal)
                 
                 VStack(spacing: 20.0) {
-                    Button(action: {}) {
+                    Button(action: {
+                        self.signIn()
+                    }) {
                         Text("Sign In")
                             .font(.headline)
                             .fontWeight(.bold)
@@ -106,6 +133,9 @@ struct SignInView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                             .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
                     }
+                    .alert(isPresented: $showAlert, content: {
+                        Alert(title: Text("Error Sign In"), message: Text(self.alertMessage), dismissButton: .default(Text("Ok")))
+                    })
                     
                     
                     Text("Forgot Password?")
@@ -115,6 +145,9 @@ struct SignInView: View {
                 }
             }
             .animation(.easeInOut, value: self.isFocus)
+            
+            ActivityIndicator()
+                .animated(self.isLoading)
         }
         .onTapGesture {
             self.isFocus = false

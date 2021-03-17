@@ -97,6 +97,9 @@ struct CardItemDetail: View {
                                 .font(.headline)
                                 .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
                                 .frame(width: 38, height: 38)
+                                .onTapGesture {
+                                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                                }
                         }
                         
                         .background(Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)))

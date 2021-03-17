@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfileView: View {
     
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var userStore : UserStore
+    
     
     init() {
         UITableView.appearance().backgroundColor = .white
@@ -31,10 +33,20 @@ struct ProfileView: View {
                     Text("Row 2")
                     Text("Row 3")
                 }
+                
+                Text("Logout")
+                    .bold()
+                    .onTapGesture {
+                        presentationMode.wrappedValue.dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.userStore.logout()
+                        }
+                        
+                    }
             }
             
             .listStyle(GroupedListStyle())
-            .navigationBarTitle("Profile")
+            .navigationBarTitle("Hello, \(self.userStore.currentUser?.username ?? "")")
             .navigationBarItems(
                 trailing:
                     Image(systemName: "xmark")
@@ -49,5 +61,6 @@ struct ProfileView: View {
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()
+            .environmentObject(UserStore())
     }
 }

@@ -11,12 +11,19 @@ var tabs = ["Hot Coffee", "Cold Coffee", "Cappuccino", "Chocolate"]
 
 struct HomeView: View {
     
+    //Global State
+    @EnvironmentObject var productStore: ProductStore
+    
+    //Local State
     @State private var showDetailView : Bool = false
     @State private var showProfileView : Bool = false
     @State private var showCartView : Bool = false
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Namespace var namespace
     @State var selectedTab = tabs[0]
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    @Namespace var namespace
+    
     
     var body: some View {
         ZStack {
@@ -125,9 +132,9 @@ struct HomeView: View {
     
     var cardItems : some View {
         HStack(spacing: 15.0) {
-            ForEach(0 ..< 4) { item in
+            ForEach(self.productStore.products.indices, id: \.self) { index in
                 GeometryReader { geometry in
-                    CardItem()
+                    CardItem(product: self.productStore.products[index])
                         .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
                         .animation(.spring(response: 0.4, dampingFraction: 0.6))
                         .onTapGesture {
@@ -153,8 +160,8 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
-                ForEach(0 ..< 6) { item in
-                    CardItemSmall()
+                ForEach(self.productStore.products.indices, id: \.self) { index in
+                    CardItemSmall(product: self.productStore.products[index])
                         .onTapGesture {
                             withAnimation(.easeIn) {
                                 self.showDetailView = true
@@ -200,7 +207,7 @@ struct HomeView: View {
             }
             
             NavigationView {
-                content
+                Text("Favorites")
             }
             .tabItem {
                 Image(systemName: "heart")
@@ -208,7 +215,7 @@ struct HomeView: View {
             }
             
             NavigationView {
-                content
+                Text("Coffees")
             }
             .tabItem {
                 Image(systemName: "book.closed")
@@ -216,7 +223,7 @@ struct HomeView: View {
             }
             
             NavigationView {
-                content
+                Text("Search")
             }
             .tabItem {
                 Image(systemName: "magnifyingglass")
@@ -251,5 +258,7 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+            .environmentObject(UserStore())
+            .environmentObject(ProductStore())
     }
 }

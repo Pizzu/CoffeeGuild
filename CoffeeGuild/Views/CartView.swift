@@ -9,14 +9,19 @@ import SwiftUI
 
 struct CartView: View {
     
+    //Global State
+    @EnvironmentObject var productStore: ProductStore
+    
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20.0) {
-                    ForEach(0 ..< 5) { item in
-                        CardItemSmall()
+                    ForEach(self.productStore.products.indices, id: \.self) { index in
+                        if index <= 5 {
+                            CardItemSmall(product: self.productStore.products[index])
+                        } 
                     }
                 }
                 .padding(.horizontal)
@@ -37,5 +42,6 @@ struct CartView: View {
 struct CartView_Previews: PreviewProvider {
     static var previews: some View {
         CartView()
+            .environmentObject(ProductStore())
     }
 }

@@ -8,31 +8,34 @@
 import SwiftUI
 
 struct CardItem: View {
+    
+    var product : Product
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack(alignment: .leading, spacing: 5) {
                 
                 Spacer()
                 
-                Image("coffee 2")
+                Image(product.image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .frame(height: 150)
               
                 
-                Text("$4.99")
+                Text(String(format: "$%.2f", product.price))
                     .font(.headline)
                     .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Cappucino")
+                    Text(product.title)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                     
-                    Text("A cappuccino starts with a bottom layer of one or two shots of espresso...")
+                    Text(product.caption)
                         .font(.caption)
                         .fontWeight(.regular)
                         .foregroundColor(.white)
@@ -68,6 +71,6 @@ struct CardItem: View {
 
 struct CardItem_Previews: PreviewProvider {
     static var previews: some View {
-        CardItem()
+        CardItem(product: allProducts[0])
     }
 }

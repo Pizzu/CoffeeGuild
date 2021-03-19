@@ -22,7 +22,7 @@ struct CardItemDetail: View {
                 
                 VStack {
                     VStack {
-                        Image("coffee 2")
+                        Image("coffee7")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 250, height: 250)

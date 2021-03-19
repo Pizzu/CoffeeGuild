@@ -8,5 +8,5 @@
 import SwiftUI
 
 class ProductStore : ObservableObject {
-    
+    @Published var products = allProducts
 }

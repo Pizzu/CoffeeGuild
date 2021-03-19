@@ -25,6 +25,7 @@ struct CoffeeGuildApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(UserStore())
+                .environmentObject(ProductStore())
         }
     }
 }

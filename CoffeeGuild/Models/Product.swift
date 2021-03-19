@@ -34,8 +34,8 @@ struct Product : Identifiable {
         case base = "Base"
     }
 }
-var c = "Hot Coffee"
-var products = [
+
+let allProducts = [
     Product(
         title: "Cappuccino",
         caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
@@ -44,6 +44,96 @@ var products = [
         price: 4.99,
         category: .hotCoffee,
         color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
-    )
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee 1",
+        price: 4.99,
+        category: .hotCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee4",
+        price: 4.99,
+        category: .hotCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffe5",
+        price: 4.99,
+        category: .hotCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee6",
+        price: 4.99,
+        category: .hotCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee7",
+        price: 4.99,
+        category: .hotCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee8",
+        price: 4.99,
+        category: .coldCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee9",
+        price: 4.99,
+        category: .coldCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "coffee11",
+        price: 4.99,
+        category: .hotCoffee,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Hot Chocolate",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "chocolate",
+        price: 4.99,
+        category: .chocolate,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
+    Product(
+        title: "Cappuccino",
+        caption : "A cappuccino starts with a bottom layer of one or two shots of espresso...",
+        description: "A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.",
+        image: "chocolate2",
+        price: 4.99,
+        category: .chocolate,
+        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+    ),
 
 ]

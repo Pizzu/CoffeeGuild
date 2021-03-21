@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CardItemDetail: View {
     
+    var product : Product
+    
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
             content
         }
     }
@@ -22,7 +23,7 @@ struct CardItemDetail: View {
                 
                 VStack {
                     VStack {
-                        Image("coffee7")
+                        Image(product.image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 250, height: 250)
@@ -37,7 +38,7 @@ struct CardItemDetail: View {
                     HStack {
                         Spacer()
                         
-                        Text("$4.99")
+                        Text(String(format: "$%.2f", product.price))
                             .font(.largeTitle)
                             .bold()
                             .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
@@ -45,11 +46,11 @@ struct CardItemDetail: View {
                     
                     HStack {
                         VStack(alignment: .leading, spacing: 8.0) {
-                            Text("Cappucino")
+                            Text(product.title)
                                 .font(.largeTitle)
                                 .bold()
                             
-                            Text("A cappuccino starts with a bottom layer of one or two shots of espresso A second layer of steamed milk is added on top, followed by a thick and airy layer of foam to lend the drink a luxurious velvety texture.")
+                            Text(product.description)
                                 .font(.footnote)
                                 .fontWeight(.regular)
                         }
@@ -160,6 +161,7 @@ struct CardItemDetail: View {
 
 struct CardItemDetail_Previews: PreviewProvider {
     static var previews: some View {
-        CardItemDetail()
+        CardItemDetail(product: allProducts[0])
+            
     }
 }

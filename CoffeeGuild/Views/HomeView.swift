@@ -18,6 +18,7 @@ struct HomeView: View {
     @State private var showDetailView : Bool = false
     @State private var showProfileView : Bool = false
     @State private var showCartView : Bool = false
+    @State private var selectedProduct : Product? = nil
     @State var selectedTab = tabs[0]
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -139,6 +140,7 @@ struct HomeView: View {
                         .animation(.spring(response: 0.4, dampingFraction: 0.6))
                         .onTapGesture {
                             withAnimation(.easeIn) {
+                                self.selectedProduct = self.productStore.products[index]
                                 self.showDetailView = true
                             }
                     }
@@ -164,6 +166,7 @@ struct HomeView: View {
                     CardItemSmall(product: self.productStore.products[index])
                         .onTapGesture {
                             withAnimation(.easeIn) {
+                                self.selectedProduct = self.productStore.products[index]
                                 self.showDetailView = true
                             }
                     }
@@ -175,9 +178,9 @@ struct HomeView: View {
     
     @ViewBuilder
     var fullContent : some View {
-        if self.showDetailView  {
+        if self.showDetailView && self.selectedProduct != nil  {
             ZStack(alignment: .topLeading) {
-                CardItemDetail()
+                CardItemDetail(product: selectedProduct!)
                 
                 Image(systemName: "chevron.left")
                     .font(.title)
@@ -230,7 +233,6 @@ struct HomeView: View {
                 Text("Search")
             }
         }
-        .accentColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
     }
     
     var sideBar : some View {
@@ -247,7 +249,6 @@ struct HomeView: View {
             }
             .listStyle(SidebarListStyle())
             .navigationTitle("Sidebar")
-            .accentColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
             
             content
         }

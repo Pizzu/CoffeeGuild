@@ -13,9 +13,9 @@ struct ProfileView: View {
     @EnvironmentObject var userStore : UserStore
     
     
-    init() {
-        UITableView.appearance().backgroundColor = .white
-    }
+//    init() {
+//        UITableView.appearance().backgroundColor = .white
+//    }
     
     var body: some View {
         NavigationView {

@@ -58,7 +58,7 @@ struct CardItemSmall: View {
         }
         .padding()
         .frame(height: 100)
-        .background(Color.white)
+        .background(Color("Gray Light"))
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 10)
     }
@@ -67,5 +67,6 @@ struct CardItemSmall: View {
 struct CardItemSmall_Previews: PreviewProvider {
     static var previews: some View {
         CardItemSmall(product: allProducts[0])
+            .preferredColorScheme(.dark)
     }
 }

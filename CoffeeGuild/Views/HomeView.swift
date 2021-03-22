@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-var tabs = ["Hot Coffee", "Cold Coffee", "Cappuccino", "Chocolate"]
-
 struct HomeView: View {
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Namespace var namespace
     
     //Global State
     @EnvironmentObject var productStore: ProductStore
@@ -19,11 +20,17 @@ struct HomeView: View {
     @State private var showProfileView : Bool = false
     @State private var showCartView : Bool = false
     @State private var selectedProduct : Product? = nil
-    @State var selectedTab = tabs[0]
+    @State private var selectedTab : String = Product.ProductCategory.hotCoffee.rawValue
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    var productCategories : [String : [Product]] {
+        Dictionary(grouping: productStore.products, by: {$0.category.rawValue})
+    }
     
-    @Namespace var namespace
+//    var productCategories : [String] {
+//        return Product.ProductCategory.allCases.map { category in
+//            return category.rawValue
+//        }
+//    }
     
     
     var body: some View {
@@ -99,7 +106,7 @@ struct HomeView: View {
     
     var tabItems : some View {
         HStack(spacing: 20.0) {
-            ForEach(tabs, id: \.self) { tab in
+            ForEach(self.productCategories.keys.sorted(by: >), id: \.self) { tab in
                 Text(tab)
                     .font(.footnote)
                     .fontWeight(.semibold)
@@ -133,14 +140,14 @@ struct HomeView: View {
     
     var cardItems : some View {
         HStack(spacing: 15.0) {
-            ForEach(self.productStore.products.indices, id: \.self) { index in
+            ForEach(self.productCategories[self.selectedTab]!, id: \.self) { product in
                 GeometryReader { geometry in
-                    CardItem(product: self.productStore.products[index])
+                    CardItem(product: product)
                         .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
                         .animation(.spring(response: 0.4, dampingFraction: 0.6))
                         .onTapGesture {
                             withAnimation(.easeIn) {
-                                self.selectedProduct = self.productStore.products[index]
+                                self.selectedProduct = product
                                 self.showDetailView = true
                             }
                     }

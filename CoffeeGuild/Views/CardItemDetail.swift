@@ -9,11 +9,20 @@ import SwiftUI
 
 struct CardItemDetail: View {
     
+    @Environment(\.presentationMode) var presentationMode
+    
     var product : Product
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             content
+            Image(systemName: "chevron.left")
+                .font(.title)
+                .foregroundColor(Color.white)
+                .padding()
+                .onTapGesture {
+                    presentationMode.wrappedValue.dismiss()
+                }
         }
     }
     
@@ -147,14 +156,12 @@ struct CardItemDetail: View {
                         .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
                 }
             }
+            .padding(.bottom, 90)
             
         }
         .edgesIgnoringSafeArea(.all)
-        .onAppear {
-            withAnimation(.easeIn) {
-                
-            }
-        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
     
 }

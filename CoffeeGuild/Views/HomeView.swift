@@ -9,14 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Namespace var namespace
     
     //Global State
     @EnvironmentObject var productStore: ProductStore
     
     //Local State
-    @State private var showDetailView : Bool = false
     @State private var showProfileView : Bool = false
     @State private var showCartView : Bool = false
     @State private var selectedProduct : Product? = nil
@@ -25,29 +23,16 @@ struct HomeView: View {
     var productCategories : [String : [Product]] {
         Dictionary(grouping: productStore.products, by: {$0.category.rawValue})
     }
-    
-//    var productCategories : [String] {
-//        return Product.ProductCategory.allCases.map { category in
-//            return category.rawValue
-//        }
-//    }
-    
-    
+
     var body: some View {
         ZStack {
-            if horizontalSizeClass == .compact {
-                tabBar
-            } else {
-                sideBar
-            }
-            fullContent
-                .background(VisualEffectBlur(blurStyle: .systemMaterial).ignoresSafeArea())
+            content
         }
         
     }
     
     var content : some View {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     tabItems
                 }
@@ -65,6 +50,7 @@ struct HomeView: View {
                 trailing: barItemsButtons
                    
             )
+            
         
     }
     
@@ -78,7 +64,7 @@ struct HomeView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 34, height: 34)
                     .clipShape(Circle())
-                    .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 0)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0.0, y: 0)
             }
             .sheet(isPresented: self.$showProfileView, content: {
                ProfileView()
@@ -96,7 +82,7 @@ struct HomeView: View {
                 
                 .background(Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)))
                 .clipShape(Circle())
-                .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 0)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0.0, y: 0)
             }
             .sheet(isPresented: self.$showCartView, content: {
                 CartView()
@@ -142,15 +128,15 @@ struct HomeView: View {
         HStack(spacing: 15.0) {
             ForEach(self.productCategories[self.selectedTab]!, id: \.self) { product in
                 GeometryReader { geometry in
-                    CardItem(product: product)
-                        .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
-                        .animation(.spring(response: 0.4, dampingFraction: 0.6))
-                        .onTapGesture {
-                            withAnimation(.easeIn) {
-                                self.selectedProduct = product
-                                self.showDetailView = true
-                            }
+                    NavigationLink(destination: CardItemDetail(product: product)) {
+                        CardItem(product: product)
+                            .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
+                            .animation(.spring(response: 0.4, dampingFraction: 0.6))
                     }
+                    .isDetailLink(true)
+                    .accentColor(.primary)
+                    .buttonStyle(NavLinkBtn())
+                    
                 }
                 .frame(width: 240, height: 350)
             }
@@ -170,97 +156,16 @@ struct HomeView: View {
             
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
                 ForEach(self.productStore.products.indices, id: \.self) { index in
-                    CardItemSmall(product: self.productStore.products[index])
-                        .onTapGesture {
-                            withAnimation(.easeIn) {
-                                self.selectedProduct = self.productStore.products[index]
-                                self.showDetailView = true
-                            }
+                    NavigationLink(destination: CardItemDetail(product: self.productStore.products[index])) {
+                        CardItemSmall(product: self.productStore.products[index])
                     }
+                    .isDetailLink(true)
+                    .accentColor(.primary)
                 }
             }
         }
         .padding(.horizontal)
     }
-    
-    @ViewBuilder
-    var fullContent : some View {
-        if self.showDetailView && self.selectedProduct != nil  {
-            ZStack(alignment: .topLeading) {
-                CardItemDetail(product: selectedProduct!)
-                
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .foregroundColor(Color.white)
-                    .padding()
-                    .onTapGesture {
-                        withAnimation(.easeIn) {
-                            self.showDetailView = false
-                        }
-                    }
-            }
-            .transition(.move(edge: .trailing))
-            .zIndex(1)
-            .frame(maxWidth: 712)
-            .frame(maxWidth: .infinity)
-        }
-    }
-    
-    var tabBar : some View {
-        TabView {
-            NavigationView {
-                content
-            }
-            .tabItem {
-                Image(systemName: "house")
-                Text("Home")
-            }
-            
-            NavigationView {
-                Text("Favorites")
-            }
-            .tabItem {
-                Image(systemName: "heart")
-                Text("Favorites")
-            }
-            
-            NavigationView {
-                Text("Coffees")
-            }
-            .tabItem {
-                Image(systemName: "book.closed")
-                Text("Coffees")
-            }
-            
-            NavigationView {
-                Text("Search")
-            }
-            .tabItem {
-                Image(systemName: "magnifyingglass")
-                Text("Search")
-            }
-        }
-    }
-    
-    var sideBar : some View {
-        NavigationView {
-            List {
-                NavigationLink(destination: content) {
-                    Label("Courses", systemImage: "house")
-                }
-                NavigationLink(destination: content) {
-                    Label("Favorites", systemImage: "heart")
-                }
-                Label("Coffees", systemImage: "book.closed")
-                Label("Search", systemImage: "magnifyingglass")
-            }
-            .listStyle(SidebarListStyle())
-            .navigationTitle("Sidebar")
-            
-            content
-        }
-    }
-    
 }
 
 struct HomeView_Previews: PreviewProvider {

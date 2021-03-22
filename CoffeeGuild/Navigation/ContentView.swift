@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @EnvironmentObject var userStore : UserStore
     
     func getUser() {
@@ -18,7 +19,11 @@ struct ContentView: View {
     var body: some View {
         Group {
             if self.userStore.isLogged {
-                HomeView()
+                if horizontalSizeClass == .compact {
+                    TabBar()
+                } else {
+                    SideBar()
+                }
             } else {
                 AuthView()
             }

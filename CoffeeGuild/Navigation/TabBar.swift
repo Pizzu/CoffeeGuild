@@ -41,7 +41,7 @@ struct TabBar: View {
             .tag(Tab.coffees)
             
             NavigationView {
-                Text("Search")
+                SearchView()
             }
             .tabItem {
                 Image(systemName: "magnifyingglass")

@@ -9,21 +9,19 @@ import SwiftUI
 
 struct SideBar: View {
     
-    @State private var selection: Tab? = .home
-    
     var body: some View {
         NavigationView {
             List {
-                NavigationLink(destination: HomeView(), tag: Tab.home, selection: $selection) {
+                NavigationLink(destination: HomeView()) {
                     Label("Courses", systemImage: "house")
                 }
-                NavigationLink(destination: HomeView(), tag: Tab.favorites, selection: $selection) {
+                NavigationLink(destination: HomeView()) {
                     Label("Favorites", systemImage: "heart")
                 }
-                NavigationLink(destination: CoffeesView(), tag: Tab.coffees, selection: $selection) {
+                NavigationLink(destination: CoffeesView()) {
                     Label("Coffees", systemImage: "book.closed")
                 }
-                NavigationLink(destination: HomeView(), tag: Tab.search, selection: $selection) {
+                NavigationLink(destination: SearchView()) {
                     Label("Search", systemImage: "magnifyingglass")
                 }
             }
@@ -32,15 +30,6 @@ struct SideBar: View {
             
             HomeView()
         }
-    }
-}
-
-extension SideBar {
-    enum Tab {
-        case home
-        case favorites
-        case coffees
-        case search
     }
 }
 

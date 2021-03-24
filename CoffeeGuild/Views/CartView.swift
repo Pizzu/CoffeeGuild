@@ -20,7 +20,7 @@ struct CartView: View {
                 VStack(spacing: 20.0) {
                     ForEach(self.productStore.products.indices, id: \.self) { index in
                         if index <= 5 {
-                            CardItemSmall(product: self.productStore.products[index])
+                            CardItemSmall(product: self.productStore.products[index], showCartAlert: .constant(false))
                         } 
                     }
                 }

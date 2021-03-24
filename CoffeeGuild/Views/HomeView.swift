@@ -17,6 +17,7 @@ struct HomeView: View {
     //Local State
     @State private var showProfileView : Bool = false
     @State private var showCartView : Bool = false
+    @State private var showCartAlert : Bool = false
     @State private var selectedProduct : Product? = nil
     @State private var selectedTab : String = Product.ProductCategory.hotCoffee.rawValue
     
@@ -27,6 +28,12 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             content
+                .disabled(showCartAlert)
+            
+            if showCartAlert {
+                AddToCartAlert()
+            }
+            
         }
         
     }
@@ -129,7 +136,7 @@ struct HomeView: View {
             ForEach(self.productCategories[self.selectedTab]!, id: \.self) { product in
                 GeometryReader { geometry in
                     NavigationLink(destination: CardItemDetail(product: product)) {
-                        CardItem(product: product)
+                        CardItem(product: product, showCartAlert: self.$showCartAlert)
                             .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
                             .animation(.spring(response: 0.4, dampingFraction: 0.6))
                     }
@@ -154,15 +161,7 @@ struct HomeView: View {
                 .foregroundColor(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
-                ForEach(self.productStore.products.indices, id: \.self) { index in
-                    NavigationLink(destination: CardItemDetail(product: self.productStore.products[index])) {
-                        CardItemSmall(product: self.productStore.products[index])
-                    }
-                    .isDetailLink(true)
-                    .accentColor(.primary)
-                }
-            }
+            CardListSmall(products: self.productStore.products, showCartAlert: self.$showCartAlert)
         }
         .padding(.horizontal)
     }

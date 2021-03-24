@@ -15,7 +15,8 @@ struct SearchView: View {
     
     //State
     @State private var searchField : String = ""
-    
+    @State private var showCartAlert : Bool = false
+
     var filteredProducts : [Product]  {
         self.productStore.products.filter { product in
             if searchField != "" {
@@ -26,17 +27,21 @@ struct SearchView: View {
     }
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
-                ForEach(self.filteredProducts, id: \.self) { product in
-                    NavigationLink(destination: CardItemDetail(product: product)) {
-                        CardItemSmall(product: product)
-                    }
-                    .isDetailLink(true)
-                    .accentColor(.primary)
-                }
+        ZStack {
+            content
+                .disabled(showCartAlert)
+            
+            if self.showCartAlert {
+                AddToCartAlert()
             }
-            .padding(.horizontal)
+        }
+    }
+    
+    
+    var content : some View {
+        ScrollView {
+            CardListSmall(products: self.filteredProducts, showCartAlert: self.$showCartAlert)
+                .padding(.horizontal)
         }
         .navigationBarTitle("Search Products")
         .navigationSearchBar {

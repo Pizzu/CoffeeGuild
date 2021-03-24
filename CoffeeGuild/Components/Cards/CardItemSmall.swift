@@ -10,6 +10,16 @@ import SwiftUI
 struct CardItemSmall: View {
     
     var product : Product
+    @Binding var showCartAlert : Bool
+    
+    
+    private func addProductToCart() {
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        self.showCartAlert = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.showCartAlert = false
+        }
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
@@ -48,6 +58,9 @@ struct CardItemSmall: View {
                             .font(.headline)
                             .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
                             .frame(width: 25, height: 25)
+                            .onTapGesture {
+                                self.addProductToCart()
+                            }
                     }
                     
                     .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
@@ -66,7 +79,7 @@ struct CardItemSmall: View {
 
 struct CardItemSmall_Previews: PreviewProvider {
     static var previews: some View {
-        CardItemSmall(product: allProducts[0])
+        CardItemSmall(product: allProducts[0], showCartAlert: .constant(false))
             .preferredColorScheme(.dark)
     }
 }

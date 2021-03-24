@@ -26,6 +26,7 @@ struct CoffeeGuildApp: App {
             ContentView()
                 .environmentObject(UserStore())
                 .environmentObject(ProductStore())
+                .environmentObject(CartStore())
         }
     }
 }

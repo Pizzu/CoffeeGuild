@@ -66,5 +66,6 @@ struct TabBar_Previews: PreviewProvider {
         TabBar()
             .environmentObject(UserStore())
             .environmentObject(ProductStore())
+            .environmentObject(CartStore())
     }
 }

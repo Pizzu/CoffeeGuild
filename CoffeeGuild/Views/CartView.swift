@@ -10,31 +10,31 @@ import SwiftUI
 struct CartView: View {
     
     //Global State
-    @EnvironmentObject var productStore: ProductStore
+    @EnvironmentObject var cartStore: CartStore
     
-    @Environment(\.presentationMode) var presentationMode
+    var cartDict : [String : [Product]] {
+        Dictionary(grouping: cartStore.cart, by: {$0.id})
+    }
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 20.0) {
-                    ForEach(self.productStore.products.indices, id: \.self) { index in
-                        if index <= 5 {
-                            CardItemSmall(product: self.productStore.products[index], showCartAlert: .constant(false))
-                        } 
+        ZStack {
+            NavigationView {
+                List {
+                    ForEach(self.cartDict.keys.sorted(), id: \.self) { key in
+                        if let products = self.cartDict[key] {
+                            if products.count > 0 {
+                                CartItem(product: products.first!, numberOfItems: products.count)
+                            }
+                        }
                     }
                 }
-                .padding(.horizontal)
-                
-            }
-            .navigationBarTitle("Cart")
-            .navigationBarItems(
-                trailing:
-                    Image(systemName: "xmark")
-                    .onTapGesture {
-                        presentationMode.wrappedValue.dismiss()
-                    }
+                .listStyle(InsetListStyle())
+                .navigationBarTitle("Cart")
+                .navigationBarItems(
+                    trailing:
+                        Text("\(self.cartStore.totalPrice)")
             )
+            }
         }
     }
 }
@@ -42,6 +42,6 @@ struct CartView: View {
 struct CartView_Previews: PreviewProvider {
     static var previews: some View {
         CartView()
-            .environmentObject(ProductStore())
+            .environmentObject(CartStore())
     }
 }

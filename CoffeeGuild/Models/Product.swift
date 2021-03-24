@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Product : Identifiable, Hashable {
     
-    var id : UUID = UUID()
+    var id : String = UUID().uuidString
     var title : String
     var caption : String
     var description : String

@@ -9,6 +9,9 @@ import SwiftUI
 
 struct CardItem: View {
     
+    //Global State
+    @EnvironmentObject var cartStore : CartStore
+    
     var product : Product
     @Binding var showCartAlert : Bool
     
@@ -16,6 +19,7 @@ struct CardItem: View {
     private func addProductToCart() {
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         self.showCartAlert = true
+        self.cartStore.addProductToCart(product: product)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.showCartAlert = false
         }
@@ -85,5 +89,6 @@ struct CardItem: View {
 struct CardItem_Previews: PreviewProvider {
     static var previews: some View {
         CardItem(product: allProducts[0], showCartAlert: .constant(false))
+            .environmentObject(CartStore())
     }
 }

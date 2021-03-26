@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Product : Identifiable, Hashable {
+struct Product : Identifiable, Codable, Hashable {
     
     var id : String = UUID().uuidString
     var title : String
@@ -18,7 +18,7 @@ struct Product : Identifiable, Hashable {
     var category : ProductCategory
     var tag : ProductTag = .base
     var likes : Int = 0
-    var color : Color
+    var color : String
     
     
     enum ProductCategory: String, CaseIterable, Codable, Hashable {
@@ -43,7 +43,7 @@ let allProducts = [
         image: "coffee 2",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -52,7 +52,7 @@ let allProducts = [
         image: "coffee 1",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -61,7 +61,7 @@ let allProducts = [
         image: "coffee4",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -70,7 +70,7 @@ let allProducts = [
         image: "coffe5",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -79,7 +79,7 @@ let allProducts = [
         image: "coffee6",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -88,7 +88,7 @@ let allProducts = [
         image: "coffee7",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -97,7 +97,7 @@ let allProducts = [
         image: "coffee8",
         price: 4.99,
         category: .coldCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -106,7 +106,7 @@ let allProducts = [
         image: "coffee9",
         price: 4.99,
         category: .coldCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -115,7 +115,7 @@ let allProducts = [
         image: "coffee11",
         price: 4.99,
         category: .hotCoffee,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Hot Chocolate",
@@ -124,7 +124,7 @@ let allProducts = [
         image: "chocolate",
         price: 4.99,
         category: .chocolate,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
     Product(
         title: "Cappuccino",
@@ -133,7 +133,7 @@ let allProducts = [
         image: "chocolate2",
         price: 4.99,
         category: .chocolate,
-        color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1))
+        color: "Brownie Dark"
     ),
 
 ]

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 class ProductStore : ObservableObject {
     @Published var products = allProducts

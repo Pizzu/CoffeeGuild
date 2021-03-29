@@ -135,7 +135,7 @@ struct HomeView: View {
     
     var cardItems : some View {
         LazyHStack(spacing: 15.0) {
-            ForEach(self.productCategories[self.selectedTab]!, id: \.self) { product in
+            ForEach(self.productCategories[self.selectedTab] ?? [], id: \.self) { product in
                 GeometryReader { geometry in
                     NavigationLink(destination: CardItemDetail(product: product)) {
                         CardItem(product: product, showCartAlert: self.$showCartAlert)

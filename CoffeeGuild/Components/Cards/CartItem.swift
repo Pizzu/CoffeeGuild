@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct CartItem: View {
     
@@ -15,7 +16,7 @@ struct CartItem: View {
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
             
-            Image(cartItem.image)
+            WebImage(url: URL(string: cartItem.image))
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 75, height: 75)

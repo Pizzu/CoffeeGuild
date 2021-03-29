@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct CardItem: View {
     
@@ -31,7 +32,7 @@ struct CardItem: View {
                 
                 Spacer()
                 
-                Image(product.image)
+                WebImage(url: URL(string: product.image))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -80,9 +81,9 @@ struct CardItem: View {
         .padding(.horizontal)
         .padding(.vertical, 25)
         .frame(width: 240, height: 350)
-        .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
+        .background(Color(product.color))
         .clipShape(RoundedRectangle(cornerRadius: 30.0, style: .continuous))
-        .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 15, x: 0.0, y: 3)
+        .shadow(color: Color(product.color).opacity(0.3), radius: 15, x: 0.0, y: 3)
     }
 }
 

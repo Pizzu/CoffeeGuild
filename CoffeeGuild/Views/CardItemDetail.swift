@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct CardItemDetail: View {
     
@@ -32,7 +33,7 @@ struct CardItemDetail: View {
                 
                 VStack {
                     VStack {
-                        Image(product.image)
+                        WebImage(url: URL(string: product.image))
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 250, height: 250)

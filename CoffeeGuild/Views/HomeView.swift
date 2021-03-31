@@ -50,8 +50,6 @@ struct HomeView: View {
                 }
                 
                 smallCardItems
-                
-                
             }
             .navigationBarTitle("Coffee Guild")
             .navigationBarItems(

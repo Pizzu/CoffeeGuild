@@ -30,7 +30,7 @@ class CartStore : ObservableObject {
         }
     }
     
-    func addProductToCart(product: Product) {
+    func addProductToCart(product: Product, quantity: Int = 1) {
         guard let currentUser = auth.currentUser else {return}
 
         let cartRef = db.collection("users").document(currentUser.uid).collection("cart").document(product.id)
@@ -38,14 +38,14 @@ class CartStore : ObservableObject {
             if let document = document, document.exists {
                 do {
                     guard var currentCartItem = try document.data(as: Cart.self) else {return}
-                    currentCartItem.quantity += 1
+                    currentCartItem.quantity += quantity
                     try cartRef.setData(from: currentCartItem, merge: true)
                 } catch {
                     print(error)
                 }
             } else {
                 do {
-                    let cartItem = Cart(id: product.id, title: product.title, price: product.price, quantity: 1, image: product.image)
+                    let cartItem = Cart(id: product.id, title: product.title, price: product.price, quantity: quantity, image: product.image)
                     try cartRef.setData(from: cartItem)
                 } catch {
                     print(error)

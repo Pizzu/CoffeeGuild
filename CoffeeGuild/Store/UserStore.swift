@@ -59,22 +59,29 @@ class UserStore : ObservableObject {
                     completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
                 }
             } else {
-                self.createUserDocument(username: username, address: address, result: result)
-                DispatchQueue.main.async {
-                    completion(FireAuthResponse(result: result, errorMessage: nil))
+                let errorMessage = self.createUserDocument(username: username, address: address, result: result)
+                if errorMessage != nil {
+                    DispatchQueue.main.async {
+                        completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(FireAuthResponse(result: result, errorMessage: nil))
+                    }
                 }
             }
         }
     }
     
-    private func createUserDocument(username: String, address: String, result: AuthDataResult?) {
+    private func createUserDocument(username: String, address: String, result: AuthDataResult?) -> String? {
         if let user = result?.user {
             do {
                 let _ = try self.db.collection("users").document(user.uid).setData(from: User(id: user.uid, username: username, email: user.email ?? "", address: address, profileImage: ""))
-            } catch  {
-                debugPrint("Error creating user")
+            } catch {
+                return self.handleFirebaseAuthError(error: error)
             }
         }
+        return nil
     }
     
     
@@ -112,6 +119,8 @@ class UserStore : ObservableObject {
             self.currentUser = nil
         } catch {
             print(self.handleFirebaseAuthError(error: error))
+            self.isLogged = false
+            self.currentUser = nil
         }
         
     }

@@ -13,7 +13,6 @@ struct HomeView: View {
     
     //Global State
     @EnvironmentObject var productStore: ProductStore
-    @EnvironmentObject var cartStore : CartStore
     
     //Local State
     @State private var showProfileView : Bool = false
@@ -92,7 +91,6 @@ struct HomeView: View {
             }
             .sheet(isPresented: self.$showCartView, content: {
                 CartView()
-                    .environmentObject(self.cartStore)
             })
         }
     }

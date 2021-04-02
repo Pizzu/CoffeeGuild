@@ -19,10 +19,11 @@ struct CardItemSmall: View {
     
     private func addProductToCart() {
         UINotificationFeedbackGenerator().notificationOccurred(.success)
-        self.showCartAlert = true
-        self.cartStore.addProductToCart(product: product)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.showCartAlert = false
+        self.cartStore.addProductToCart(product: product) {
+            self.showCartAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.showCartAlert = false
+            }
         }
     }
     

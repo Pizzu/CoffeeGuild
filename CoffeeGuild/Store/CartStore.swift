@@ -30,7 +30,7 @@ class CartStore : ObservableObject {
         }
     }
     
-    func addProductToCart(product: Product, quantity: Int = 1) {
+    func addProductToCart(product: Product, quantity: Int = 1, completion: @escaping () -> Void) {
         guard let currentUser = auth.currentUser else {return}
 
         let cartRef = db.collection("users").document(currentUser.uid).collection("cart").document(product.id)
@@ -40,6 +40,10 @@ class CartStore : ObservableObject {
                     guard var currentCartItem = try document.data(as: Cart.self) else {return}
                     currentCartItem.quantity += quantity
                     try cartRef.setData(from: currentCartItem, merge: true)
+                    DispatchQueue.main.async {
+                        completion()
+                    }
+                    
                 } catch {
                     print(error)
                 }
@@ -47,6 +51,9 @@ class CartStore : ObservableObject {
                 do {
                     let cartItem = Cart(id: product.id, title: product.title, price: product.price, quantity: quantity, image: product.image)
                     try cartRef.setData(from: cartItem)
+                    DispatchQueue.main.async {
+                        completion()
+                    }
                 } catch {
                     print(error)
                 }

@@ -35,13 +35,14 @@ struct CardItemDetail: View {
     
     private func addProductToCart() {
         if self.itemNumbers > 0 {
-            self.showCartAlert = true
-            self.cartStore.addProductToCart(product: product, quantity: self.itemNumbers)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.showCartAlert = false
-                self.itemNumbers = 0
-                
+            self.cartStore.addProductToCart(product: product, quantity: self.itemNumbers) {
+                self.showCartAlert = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.showCartAlert = false
+                    self.itemNumbers = 0
+                }
             }
+            
         }
     }
     

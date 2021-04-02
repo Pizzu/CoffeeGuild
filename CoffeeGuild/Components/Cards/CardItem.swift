@@ -19,10 +19,11 @@ struct CardItem: View {
     
     private func addProductToCart() {
         UINotificationFeedbackGenerator().notificationOccurred(.success)
-        self.showCartAlert = true
-        self.cartStore.addProductToCart(product: product)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.showCartAlert = false
+        self.cartStore.addProductToCart(product: product) {
+            self.showCartAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.showCartAlert = false
+            }
         }
     }
     
@@ -83,7 +84,7 @@ struct CardItem: View {
         .frame(width: 240, height: 350)
         .background(Color(product.color))
         .clipShape(RoundedRectangle(cornerRadius: 30.0, style: .continuous))
-        .shadow(color: Color(product.color).opacity(0.3), radius: 15, x: 0.0, y: 3)
+        .shadow(color: Color(product.color).opacity(0.3), radius: 10, x: 0.0, y: 2)
     }
 }
 

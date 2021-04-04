@@ -24,20 +24,26 @@ struct SignInView: View {
     private func signIn() {
         self.isFocus = false
         self.isLoading = true
-        
-        self.userStore.signinUser(email: self.email, password: self.password) { (response) in
-            self.isLoading = false
-            if response.errorMessage != nil {
-                self.alertMessage = response.errorMessage!
-                self.showAlert = true
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.email = ""
-                    self.password = ""
-                    self.userStore.getCurrentUser()
+        do {
+            try self.userStore.signinUser(email: self.email, password: self.password) { (response) in
+                self.isLoading = false
+                if response.errorMessage != nil {
+                    self.alertMessage = response.errorMessage!
+                    self.showAlert = true
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.email = ""
+                        self.password = ""
+                        self.userStore.getCurrentUser()
+                    }
                 }
             }
+        } catch {
+            self.isLoading = false
+            self.alertMessage = error.localizedDescription
+            self.showAlert = true
         }
+        
     }
     
     var body: some View {

@@ -26,22 +26,28 @@ struct SignUpView: View {
     private func signUp() {
         self.isFocus = false
         self.isLoading = true
-        
-        self.userStore.signupUser(username: username, email: email, password: password, address: address) { (response) in
-            self.isLoading = false
-            if response.errorMessage != nil {
-                self.alertMessage = response.errorMessage!
-                self.showAlert = true
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.username = ""
-                    self.email = ""
-                    self.password = ""
-                    self.address = ""
-                    self.userStore.getCurrentUser()
+        do {
+            try self.userStore.signupUser(username: username, email: email, password: password, address: address) { (response) in
+                self.isLoading = false
+                if response.errorMessage != nil {
+                    self.alertMessage = response.errorMessage!
+                    self.showAlert = true
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.username = ""
+                        self.email = ""
+                        self.password = ""
+                        self.address = ""
+                        self.userStore.getCurrentUser()
+                    }
                 }
             }
+        } catch {
+            self.isLoading = false
+            self.alertMessage = error.localizedDescription
+            self.showAlert = true
         }
+        
     }
     
     var body: some View {

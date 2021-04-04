@@ -20,6 +20,8 @@ class UserStore : ObservableObject {
     
     private let auth : Auth = Auth.auth()
     private let db : Firestore = Firestore.firestore()
+    private var firebaseErrorHandling : FirebaseErrorHandling = FirebaseErrorHandling()
+    
     
     //Get Current User
     func getCurrentUser() {
@@ -51,10 +53,11 @@ class UserStore : ObservableObject {
     }
     
     //Sign up and create user
-    func signupUser(username: String, email: String, password: String, address: String, completion: @escaping (FireAuthResponse) -> Void) {
+    func signupUser(username: String, email: String, password: String, address: String, completion: @escaping (FireAuthResponse) -> Void) throws {
+        guard !username.isEmpty || !email.isEmpty || !password.isEmpty || !address.isEmpty else {throw ValidationError.emptyValue}
         auth.createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                let errorMessage = self.handleFirebaseAuthError(error: error)
+                let errorMessage = self.firebaseErrorHandling.handleFirebaseAuthError(error: error)
                 DispatchQueue.main.async {
                     completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
                 }
@@ -78,7 +81,7 @@ class UserStore : ObservableObject {
             do {
                 let _ = try self.db.collection("users").document(user.uid).setData(from: User(id: user.uid, username: username, email: user.email ?? "", address: address, profileImage: ""))
             } catch {
-                return self.handleFirebaseAuthError(error: error)
+                return self.firebaseErrorHandling.handleFirebaseAuthError(error: error)
             }
         }
         return nil
@@ -86,10 +89,11 @@ class UserStore : ObservableObject {
     
     
     //Sign in user
-    func signinUser(email: String, password: String, completion: @escaping (FireAuthResponse) -> Void) {
+    func signinUser(email: String, password: String, completion: @escaping (FireAuthResponse) -> Void) throws {
+        guard !email.isEmpty || !password.isEmpty else {throw ValidationError.emptyValue}
         auth.signIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                let errorMessage = self.handleFirebaseAuthError(error: error)
+                let errorMessage = self.firebaseErrorHandling.handleFirebaseAuthError(error: error)
                 DispatchQueue.main.async {
                     completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
                 }
@@ -101,16 +105,6 @@ class UserStore : ObservableObject {
         }
     }
     
-    
-    // Handle Firebase Errors
-    private func handleFirebaseAuthError(error: Error) -> String {
-        if let errorCode = AuthErrorCode(rawValue: error._code) {
-            let errorMessage = errorCode.errorMessage
-            return errorMessage
-        }
-        return ""
-    }
-    
     // Logout
     func logout() {
         do {
@@ -118,38 +112,10 @@ class UserStore : ObservableObject {
             self.isLogged = false
             self.currentUser = nil
         } catch {
-            print(self.handleFirebaseAuthError(error: error))
+            print(self.firebaseErrorHandling.handleFirebaseAuthError(error: error))
             self.isLogged = false
             self.currentUser = nil
         }
         
-    }
-}
-
-struct FireAuthResponse {
-    let result : AuthDataResult?
-    let errorMessage : String?
-}
-
-extension AuthErrorCode {
-    var errorMessage: String {
-        switch self {
-        case .emailAlreadyInUse:
-            return "The email is already in use with another account. Pick another email."
-        case .userNotFound:
-            return "Account not found for the specified user. Please check and try again."
-        case .userDisabled:
-            return "Your account has been disabled. Please contact support."
-        case .invalidEmail, .invalidSender, .invalidRecipientEmail:
-            return "Please enter a valid email."
-        case .networkError:
-            return "Network error. Please try again."
-        case .weakPassword:
-            return "Your password is too weak. The password must be 6 characters long or more."
-        case .wrongPassword:
-            return "Your password or email is incorrect."
-        default:
-            return "Sorry, something went wrong."
-        }
     }
 }

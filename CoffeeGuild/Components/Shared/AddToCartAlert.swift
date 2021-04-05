@@ -39,12 +39,15 @@ struct AddToCartAlert: View {
         .background(BlurEffectView(style: .systemMaterial))
         .clipShape(RoundedRectangle(cornerRadius: 25.0, style: .continuous))
         .scaleEffect(self.show ? 1 : 0.6)
-        .animation(.spring())
         .onAppear {
-            self.show = true
+            withAnimation(.spring()) {
+                self.show = true
+            }
         }
         .onDisappear {
-            self.show = false
+            withAnimation(.spring()) {
+                self.show = true
+            }
         }
     }
 }

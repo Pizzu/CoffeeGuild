@@ -13,16 +13,16 @@ struct CardItemSmall: View {
     //Global State
     @EnvironmentObject var cartStore : CartStore
     
+    //Properties
     var product : Product
-    @Binding var showCartAlert : Bool
     
     
     private func addProductToCart() {
         UINotificationFeedbackGenerator().notificationOccurred(.success)
         self.cartStore.addProductToCart(product: product) {
-            self.showCartAlert = true
+            self.cartStore.showCartAlert = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.showCartAlert = false
+                self.cartStore.showCartAlert = false
             }
         }
     }
@@ -85,7 +85,7 @@ struct CardItemSmall: View {
 
 struct CardItemSmall_Previews: PreviewProvider {
     static var previews: some View {
-        CardItemSmall(product: allProducts[0], showCartAlert: .constant(false))
+        CardItemSmall(product: allProducts[0])
             .environmentObject(CartStore())
             .preferredColorScheme(.dark)
     }

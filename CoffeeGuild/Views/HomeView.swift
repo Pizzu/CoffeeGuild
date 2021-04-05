@@ -13,11 +13,11 @@ struct HomeView: View {
     
     //Global State
     @EnvironmentObject var productStore: ProductStore
+    @EnvironmentObject var cartStore: CartStore
     
     //Local State
     @State private var showProfileView : Bool = false
     @State private var showCartView : Bool = false
-    @State private var showCartAlert : Bool = false
     @State private var selectedProduct : Product? = nil
     @State private var selectedTab : String = Product.ProductCategory.hotCoffee.rawValue
     
@@ -28,12 +28,11 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             content
-                .disabled(showCartAlert)
+                .disabled(self.cartStore.showCartAlert)
             
-            if showCartAlert {
+            if self.cartStore.showCartAlert {
                 AddToCartAlert()
             }
-            
         }
         
     }
@@ -55,8 +54,6 @@ struct HomeView: View {
                 trailing: barItemsButtons
                    
             )
-            
-        
     }
     
     var barItemsButtons : some View {
@@ -134,7 +131,7 @@ struct HomeView: View {
             ForEach(self.productCategories[self.selectedTab] ?? [], id: \.self) { product in
                 GeometryReader { geometry in
                     NavigationLink(destination: CardItemDetail(product: product)) {
-                        CardItem(product: product, showCartAlert: self.$showCartAlert)
+                        CardItem(product: product)
                             .scaleEffect(geometry.frame(in: .global).minX < UIScreen.main.bounds.width - 175 ? 1 : 0.9 )
                             .animation(.spring(response: 0.4, dampingFraction: 0.6))
                     }
@@ -159,7 +156,7 @@ struct HomeView: View {
                 .foregroundColor(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            CardListSmall(products: self.productStore.products, showCartAlert: self.$showCartAlert)
+            CardListSmall(products: self.productStore.products)
         }
         .padding(.horizontal)
     }

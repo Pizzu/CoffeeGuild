@@ -18,7 +18,6 @@ struct CardItemDetail: View {
     
     // Local State
     @State private var itemNumbers : Int = 0
-    @State private var showCartAlert : Bool = false
     
     
     private func incrementCartItem() {
@@ -36,9 +35,9 @@ struct CardItemDetail: View {
     private func addProductToCart() {
         if self.itemNumbers > 0 {
             self.cartStore.addProductToCart(product: product, quantity: self.itemNumbers) {
-                self.showCartAlert = true
+                self.cartStore.showCartAlert = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.showCartAlert = false
+                    self.cartStore.showCartAlert = false
                     self.itemNumbers = 0
                 }
             }
@@ -59,9 +58,9 @@ struct CardItemDetail: View {
                         presentationMode.wrappedValue.dismiss()
                     }
             }
-            .disabled(showCartAlert)
+            .disabled(self.cartStore.showCartAlert)
             
-            if self.showCartAlert {
+            if self.cartStore.showCartAlert {
                 AddToCartAlert()
             }
             

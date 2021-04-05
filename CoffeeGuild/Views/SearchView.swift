@@ -12,10 +12,10 @@ struct SearchView: View {
     
     //Global State
     @EnvironmentObject var productStore: ProductStore
+    @EnvironmentObject var cartStore : CartStore
     
     //State
     @State private var searchField : String = ""
-    @State private var showCartAlert : Bool = false
 
     var filteredProducts : [Product]  {
         self.productStore.products.filter { product in
@@ -29,9 +29,9 @@ struct SearchView: View {
     var body: some View {
         ZStack {
             content
-                .disabled(showCartAlert)
+                .disabled(cartStore.showCartAlert)
             
-            if self.showCartAlert {
+            if self.cartStore.showCartAlert {
                 AddToCartAlert()
             }
         }
@@ -40,7 +40,7 @@ struct SearchView: View {
     
     var content : some View {
         ScrollView {
-            CardListSmall(products: self.filteredProducts, showCartAlert: self.$showCartAlert)
+            CardListSmall(products: self.filteredProducts)
                 .padding(.horizontal)
         }
         .navigationBarTitle("Search Products")
@@ -59,5 +59,6 @@ struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
         SearchView()
             .environmentObject(ProductStore())
+            .environmentObject(CartStore())
     }
 }

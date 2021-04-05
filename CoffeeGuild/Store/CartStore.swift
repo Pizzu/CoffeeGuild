@@ -12,6 +12,7 @@ import Firebase
 class CartStore : ObservableObject {
     @Published var cartItems : [Cart] = []
     @Published var totalPrice : Float = 0.0
+    @Published var showCartAlert : Bool = false
     
     private let db : Firestore = Firestore.firestore()
     private let auth : Auth = Auth.auth()

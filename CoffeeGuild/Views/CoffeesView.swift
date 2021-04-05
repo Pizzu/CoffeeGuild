@@ -11,9 +11,7 @@ struct CoffeesView: View {
     
     // Global State
     @EnvironmentObject var productStore : ProductStore
-    
-    //Local State
-    @State private var showCartAlert : Bool = false
+    @EnvironmentObject var cartStore : CartStore
     
     var productCategories : [String : [Product]] {
         Dictionary(grouping: productStore.products, by: {$0.category.rawValue})
@@ -23,9 +21,9 @@ struct CoffeesView: View {
         ZStack {
             content
             
-            if self.showCartAlert {
+            if self.cartStore.showCartAlert {
                 AddToCartAlert()
-                    .disabled(showCartAlert)
+                    .disabled(self.cartStore.showCartAlert)
             }
         }
         .navigationBarTitle("Our Menu")
@@ -40,12 +38,13 @@ struct CoffeesView: View {
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
+                        .padding(.vertical, 8)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 15.0) {
                             ForEach(self.productCategories[key] ?? [], id: \.self) { product in
                                 NavigationLink(destination: CardItemDetail(product: product)) {
-                                    CardItem(product: product, showCartAlert: self.$showCartAlert)
+                                    CardItem(product: product)
                                 }
                                 .isDetailLink(true)
                                 .accentColor(.primary)
@@ -66,5 +65,6 @@ struct CoffeesView_Previews: PreviewProvider {
     static var previews: some View {
         CoffeesView()
             .environmentObject(ProductStore())
+            .environmentObject(CartStore())
     }
 }

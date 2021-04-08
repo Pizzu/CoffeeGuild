@@ -15,10 +15,21 @@ struct CardItemDetail: View {
     
     // Global State
     @EnvironmentObject var cartStore : CartStore
+    @EnvironmentObject var productStore : ProductStore
     
     // Local State
     @State private var itemNumbers : Int = 0
     
+    
+    var isFavorite : Bool {
+        return self.productStore.favoriteProducts.contains {$0.id == self.product.id}
+    }
+    
+    private func favoriteBtnPressed() {
+        self.productStore.toggleProductToFavorite(product: self.product) {
+            //
+        }
+    }
     
     private func incrementCartItem() {
         UINotificationFeedbackGenerator().notificationOccurred(.success)
@@ -210,10 +221,11 @@ struct CardItemDetail: View {
                         .frame(width: 38, height: 38)
                         .onTapGesture {
                             UINotificationFeedbackGenerator().notificationOccurred(.success)
+                            self.favoriteBtnPressed()
                         }
                 }
                 
-                .background(Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)))
+                .background(self.isFavorite ? Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)) : Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)))
                 .clipShape(Circle())
                 .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0.0, y: 10)
             }
@@ -227,6 +239,7 @@ struct CardItemDetail_Previews: PreviewProvider {
     static var previews: some View {
         CardItemDetail(product: allProducts[0])
             .environmentObject(CartStore())
+            .environmentObject(ProductStore())
             
     }
 }

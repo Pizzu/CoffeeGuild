@@ -33,8 +33,9 @@ class CartStore : ObservableObject {
     
     func addProductToCart(product: Product, quantity: Int = 1, completion: @escaping () -> Void) {
         guard let currentUser = auth.currentUser else {return}
-
-        let cartRef = db.collection("users").document(currentUser.uid).collection("cart").document(product.id)
+        guard let productId = product.id else {return}
+        
+        let cartRef = db.collection("users").document(currentUser.uid).collection("cart").document(productId)
         cartRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 do {
@@ -50,7 +51,7 @@ class CartStore : ObservableObject {
                 }
             } else {
                 do {
-                    let cartItem = Cart(id: product.id, title: product.title, price: product.price, quantity: quantity, image: product.image)
+                    let cartItem = Cart(id: productId, title: product.title, price: product.price, quantity: quantity, image: product.image)
                     try cartRef.setData(from: cartItem)
                     DispatchQueue.main.async {
                         completion()

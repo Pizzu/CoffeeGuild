@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseFirestoreSwift
 
 struct Product : Identifiable, Codable, Hashable {
     
-    var id : String = UUID().uuidString
+    @DocumentID var id : String? = UUID().uuidString
     var title : String
     var caption : String
     var description : String

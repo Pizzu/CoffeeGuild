@@ -23,8 +23,7 @@ struct TabBar: View {
             .tag(Tab.home)
             
             NavigationView {
-                Text("Favorites")
-            }
+                FavoriteView()            }
             .tabItem {
                 Image(systemName: "heart")
                 Text("Favorites")

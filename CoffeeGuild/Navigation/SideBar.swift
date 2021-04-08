@@ -15,7 +15,7 @@ struct SideBar: View {
                 NavigationLink(destination: HomeView()) {
                     Label("Courses", systemImage: "house")
                 }
-                NavigationLink(destination: HomeView()) {
+                NavigationLink(destination: FavoriteView()) {
                     Label("Favorites", systemImage: "heart")
                 }
                 NavigationLink(destination: CoffeesView()) {

@@ -18,7 +18,6 @@ class ProductStore : ObservableObject {
     
     init() {
         fetchProducts()
-        fetchFavoriteProducts()
     }
     
     private func fetchProducts() {

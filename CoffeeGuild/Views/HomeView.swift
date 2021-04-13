@@ -34,6 +34,9 @@ struct HomeView: View {
                 AddToCartAlert()
             }
         }
+        .onAppear {
+            self.productStore.fetchFavoriteProducts()
+        }
         
     }
     
@@ -88,6 +91,7 @@ struct HomeView: View {
             }
             .sheet(isPresented: self.$showCartView, content: {
                 CartView()
+                    .environmentObject(self.cartStore)
             })
         }
     }

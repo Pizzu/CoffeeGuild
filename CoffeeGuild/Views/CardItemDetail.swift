@@ -58,19 +58,10 @@ struct CardItemDetail: View {
     
     var body: some View {
         ZStack {
-            ZStack(alignment: .topLeading) {
-                content
-                
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .foregroundColor(Color.white)
-                    .padding()
-                    .onTapGesture {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-            }
-            .disabled(self.cartStore.showCartAlert)
             
+            content
+                .disabled(self.cartStore.showCartAlert)
+
             if self.cartStore.showCartAlert {
                 AddToCartAlert()
             }
@@ -135,8 +126,6 @@ struct CardItemDetail: View {
             
         }
         .edgesIgnoringSafeArea(.all)
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
     }
     
     var cover : some View {

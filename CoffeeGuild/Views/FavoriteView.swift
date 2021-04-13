@@ -12,17 +12,12 @@ struct FavoriteView: View {
     //Global State
     @EnvironmentObject var productStore : ProductStore
     
-    private func fetchFavorites() {
-        self.productStore.fetchFavoriteProducts()
-    }
-    
     var body: some View {
         VStack {
             ForEach(self.productStore.favoriteProducts) { item in
                 Text(item.title)
             }
         }
-        .onAppear(perform: fetchFavorites)
     }
 }
 

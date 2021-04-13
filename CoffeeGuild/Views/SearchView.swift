@@ -16,6 +16,7 @@ struct SearchView: View {
     
     //State
     @State private var searchField : String = ""
+    @State private var isEditing : Bool = false
 
     var filteredProducts : [Product]  {
         self.productStore.products.filter { product in
@@ -40,18 +41,19 @@ struct SearchView: View {
     
     var content : some View {
         ScrollView {
-            CardListSmall(products: self.filteredProducts)
-                .padding(.horizontal)
-        }
-        .navigationBarTitle("Search Products")
-        .navigationSearchBar {
-            SearchBar("Search...", text: $searchField)
+            SearchBar("Search...", text: $searchField, isEditing: $isEditing)
+                .showsCancelButton(isEditing)
                 .onCancel {
                     if self.filteredProducts.isEmpty {
                         self.searchField = ""
                     }
                 }
+                .padding(.horizontal)
+            
+            CardListSmall(products: self.filteredProducts)
+                .padding(.horizontal)
         }
+        .navigationBarTitle("Search Products")
     }
 }
 

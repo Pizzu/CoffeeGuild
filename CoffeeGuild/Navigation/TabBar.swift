@@ -30,6 +30,13 @@ struct TabBar: View {
             }
             .tag(Tab.favorites)
             
+            ShopView()
+                .tabItem {
+                    Image(systemName: "map")
+                    Text("Shops")
+                }
+                .tag(Tab.shops)
+            
             NavigationView {
                 CoffeesView()
             }
@@ -55,6 +62,7 @@ extension TabBar {
     enum Tab {
         case home
         case favorites
+        case shops
         case coffees
         case search
     }

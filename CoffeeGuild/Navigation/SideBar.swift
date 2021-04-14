@@ -18,6 +18,11 @@ struct SideBar: View {
                 NavigationLink(destination: FavoriteView()) {
                     Label("Favorites", systemImage: "heart")
                 }
+                
+                NavigationLink(destination: ShopView()) {
+                    Label("Shops", systemImage: "map")
+                }
+                
                 NavigationLink(destination: CoffeesView()) {
                     Label("Coffees", systemImage: "book.closed")
                 }

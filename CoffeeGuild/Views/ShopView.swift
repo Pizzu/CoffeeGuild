@@ -11,7 +11,7 @@ import MapKit
 struct ShopView: View {
     
     @StateObject var shopStore = ShopStore()
-    @State private var region : MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 42.50, longitude: 12.50), span: MKCoordinateSpan(latitudeDelta: 100, longitudeDelta: 100))
+    @StateObject var locationFetcher = LocationFetcher()
     @State private var showBottomCard : Bool = false
     @State private var showFullBottomCard : Bool = false
     @State private var bottomCardPosition : CGSize = CGSize.zero
@@ -21,12 +21,17 @@ struct ShopView: View {
         ZStack {
             map
             
+            actionButton
+            
             bottomCard
+        }
+        .onAppear {
+            self.locationFetcher.getUserPosition()
         }
     }
     
     var map : some View {
-        Map(coordinateRegion: $region, annotationItems: shopStore.shops) { shop in
+        Map(coordinateRegion: $locationFetcher.region, showsUserLocation: true, annotationItems: shopStore.shops) { shop in
             MapAnnotation(coordinate: shop.coordinate, anchorPoint: CGPoint(x: 0.5, y: 0.5)) {
                 Image("LogoIllustration")
                     .resizable()
@@ -37,7 +42,7 @@ struct ShopView: View {
                     .clipShape(Circle())
                     .onTapGesture {
                         withAnimation {
-                            self.region = MKCoordinateRegion(center: shop.coordinate, span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
+                            self.locationFetcher.region = MKCoordinateRegion(center: shop.coordinate, span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
                             self.showBottomCard = true
                             self.selectedShop = shop
                         }
@@ -46,6 +51,27 @@ struct ShopView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    var actionButton : some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    self.locationFetcher.getUserPosition()
+                }, label: {
+                    Image(systemName: "location.fill")
+                        .font(.headline)
+                        .foregroundColor(Color.black)
+                        .frame(width: 38, height: 38)
+                        .background(Color.white)
+                        .clipShape(Circle())
+                })
+            }
+            .padding(.horizontal)
+            
+            Spacer()
+        }
     }
     
     var bottomCard : some View {

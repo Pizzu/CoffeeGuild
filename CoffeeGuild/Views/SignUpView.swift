@@ -20,6 +20,7 @@ struct SignUpView: View {
     @State private var address : String = ""
     @State var isFocus : Bool = false
     @State var isLoading : Bool = false
+    @State var isSuccessful : Bool = false
     @State var showAlert : Bool = false
     @State var alertMessage : String = ""
 
@@ -29,11 +30,14 @@ struct SignUpView: View {
         do {
             try self.userStore.signupUser(username: username, email: email, password: password, address: address) { (response) in
                 self.isLoading = false
+                self.isSuccessful = true
                 if response.errorMessage != nil {
+                    self.isSuccessful = false
                     self.alertMessage = response.errorMessage!
                     self.showAlert = true
                 } else {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.isSuccessful = false
                         self.username = ""
                         self.email = ""
                         self.password = ""
@@ -44,13 +48,23 @@ struct SignUpView: View {
             }
         } catch {
             self.isLoading = false
+            self.isSuccessful = false
             self.alertMessage = error.localizedDescription
             self.showAlert = true
         }
-        
     }
     
     var body: some View {
+        ZStack {
+            content
+            
+            if self.isSuccessful {
+                SuccessLog()
+            }
+        }
+    }
+    
+    var content : some View {
         ZStack {
             AuthCover()
             

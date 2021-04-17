@@ -15,6 +15,7 @@ class ProductStore : ObservableObject {
     
     private let db : Firestore = Firestore.firestore()
     private let auth : Auth = Auth.auth()
+    private var ref : ListenerRegistration? = nil
     
     init() {
         fetchProducts()
@@ -43,7 +44,7 @@ class ProductStore : ObservableObject {
     
     func fetchFavoriteProducts() {
         guard let currentUser = auth.currentUser else {return}
-        db.collection("users").document(currentUser.uid).collection("favorites").addSnapshotListener { (querySnapshot, error) in
+        self.ref = db.collection("users").document(currentUser.uid).collection("favorites").addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot?.documents else {return}
             self.favoriteProducts = documents.compactMap({ (queryDocumentSnapshot) -> Product? in
                 return try? queryDocumentSnapshot.data(as: Product.self)
@@ -76,5 +77,9 @@ class ProductStore : ObservableObject {
                 
             }
         }
+    }
+    
+    func detachListener() {
+        ref?.remove()
     }
 }

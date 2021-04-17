@@ -22,6 +22,9 @@ struct FavoriteView: View {
                 AddToCartAlert()
             }
         }
+        .onDisappear {
+            self.productStore.detachListener()
+        }
         
        
     }

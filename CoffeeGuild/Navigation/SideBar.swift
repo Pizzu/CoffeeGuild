@@ -13,7 +13,7 @@ struct SideBar: View {
         NavigationView {
             List {
                 NavigationLink(destination: HomeView()) {
-                    Label("Courses", systemImage: "house")
+                    Label("Home", systemImage: "house")
                 }
                 NavigationLink(destination: FavoriteView()) {
                     Label("Favorites", systemImage: "heart")

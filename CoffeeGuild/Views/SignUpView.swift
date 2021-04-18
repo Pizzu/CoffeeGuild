@@ -18,14 +18,12 @@ struct SignUpView: View {
     @State private var email : String = ""
     @State private var password : String = ""
     @State private var address : String = ""
-    @State var isFocus : Bool = false
     @State var isLoading : Bool = false
     @State var isSuccessful : Bool = false
     @State var showAlert : Bool = false
     @State var alertMessage : String = ""
 
     private func signUp() {
-        self.isFocus = false
         self.isLoading = true
         do {
             try self.userStore.signupUser(username: username, email: email, password: password, address: address) { (response) in
@@ -57,6 +55,7 @@ struct SignUpView: View {
     var body: some View {
         ZStack {
             content
+                .disabled(isLoading)
             
             if self.isSuccessful {
                 SuccessLog()
@@ -107,9 +106,6 @@ struct SignUpView: View {
                             .foregroundColor(.white)
                             .padding(.leading)
                             .frame(height: 44)
-                            .onTapGesture {
-                                self.isFocus = true
-                            }
                     }
                     
                     Divider()
@@ -130,9 +126,6 @@ struct SignUpView: View {
                             .foregroundColor(.white)
                             .padding(.leading)
                             .frame(height: 44)
-                            .onTapGesture {
-                                self.isFocus = true
-                            }
                     }
                     
                     Divider()
@@ -153,9 +146,6 @@ struct SignUpView: View {
                             .foregroundColor(.white)
                             .padding(.leading)
                             .frame(height: 44)
-                            .onTapGesture {
-                                self.isFocus = true
-                            }
                     }
                     
                     Divider()
@@ -176,9 +166,6 @@ struct SignUpView: View {
                             .foregroundColor(.white)
                             .padding(.leading)
                             .frame(height: 44)
-                            .onTapGesture {
-                                self.isFocus = true
-                            }
                     }
                 }
                 .padding(.horizontal)
@@ -207,14 +194,12 @@ struct SignUpView: View {
                 })
  
             }
-            .animation(.easeInOut, value: self.isFocus)
             
             ActivityIndicator()
                 .animated(self.isLoading)
                 
         }
         .onTapGesture {
-            self.isFocus = false
             self.hideKeyboard()
         }
     }

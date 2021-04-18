@@ -116,6 +116,21 @@ class UserStore : ObservableObject {
             self.isLogged = false
             self.currentUser = nil
         }
-        
+    }
+    
+    // Reset Password
+    func resetPassword(with email : String, completion: @escaping (Error?) -> Void) throws {
+        guard !email.isEmpty else {throw ValidationError.emptyValue}
+        auth.sendPasswordReset(withEmail: email) { error in
+            if error != nil {
+                DispatchQueue.main.async {
+                    completion(error)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }
     }
 }

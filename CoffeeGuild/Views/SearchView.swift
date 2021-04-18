@@ -33,7 +33,7 @@ struct SearchView: View {
                 .disabled(cartStore.showCartAlert)
             
             if self.cartStore.showCartAlert {
-                AddToCartAlert()
+                CustomAlert(title: "Product", description: "Added to cart")
             }
         }
     }

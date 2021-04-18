@@ -1,5 +1,5 @@
 //
-//  AddToCartAlert.swift
+//  CustomAlert.swift
 //  CoffeeGuild
 //
 //  Created by Luca Lo Forte on 24/3/21.
@@ -8,28 +8,38 @@
 import SwiftUI
 import SwiftUIX
 
-struct AddToCartAlert: View {
+struct CustomAlert: View {
     
     @State private var show : Bool = false
+    
+    var title : String
+    var description : String
+    var icon : IconType = .checkmark
+    var color : Color = Color(#colorLiteral(red: 0.1568627451, green: 0.9254901961, blue: 0.1411764706, alpha: 1))
+    
+    enum IconType : String {
+        case checkmark = "checkmark"
+        case xmark = "xmark"
+    }
     
     var body: some View {
         VStack(spacing: 30.0) {
             Circle()
                 .stroke(lineWidth: 7)
-                .fill(Color(#colorLiteral(red: 0.1568627451, green: 0.9254901961, blue: 0.1411764706, alpha: 1)))
+                .fill(self.color)
                 .frame(width: 100, height: 100)
                 .overlay(
-                    Image(systemName: "checkmark")
+                    Image(systemName: self.icon.rawValue)
                         .font(.largeTitle, weight: .bold)
-                        .foregroundColor(Color(#colorLiteral(red: 0.1568627451, green: 0.9254901961, blue: 0.1411764706, alpha: 1)))
+                        .foregroundColor(self.color)
                 )
             
-            VStack(spacing: 5.0) {
-                Text("Product")
+            VStack(alignment: .center, spacing: 5.0) {
+                Text(self.title)
                     .font(.headline)
                     .bold()
                 
-                Text("Added to Cart")
+                Text(self.description)
                     .font(.headline)
                     .bold()
             }
@@ -52,9 +62,8 @@ struct AddToCartAlert: View {
     }
 }
 
-struct AddToCartAlert_Previews: PreviewProvider {
+struct CustomAlert_Previews: PreviewProvider {
     static var previews: some View {
-        AddToCartAlert()
-            
+        CustomAlert(title: "Product", description: "Added to cart")
     }
 }

@@ -19,7 +19,7 @@ struct FavoriteView: View {
                 .disabled(self.cartStore.showCartAlert)
             
             if self.cartStore.showCartAlert {
-                AddToCartAlert()
+                CustomAlert(title: "Product", description: "Added to cart")
             }
         }
         .onDisappear {

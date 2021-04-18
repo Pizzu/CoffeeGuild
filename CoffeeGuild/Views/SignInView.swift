@@ -16,14 +16,14 @@ struct SignInView: View {
     
     @State private var email : String = ""
     @State private var password : String = ""
-    @State var isFocus : Bool = false
     @State var isLoading : Bool = false
     @State var isSuccessful : Bool = false
     @State var showAlert : Bool = false
     @State var alertMessage : String = ""
+    @State var showReset : Bool = false
+    @State var isResetSuccessful : Bool = false
     
     private func signIn() {
-        self.isFocus = false
         self.isLoading = true
         do {
             try self.userStore.signinUser(email: self.email, password: self.password) { (response) in
@@ -53,6 +53,7 @@ struct SignInView: View {
     var body: some View {
         ZStack {
             content
+                .disabled(isLoading)
             
             if self.isSuccessful {
                 SuccessLog()
@@ -102,9 +103,6 @@ struct SignInView: View {
                             .foregroundColor(.white)
                             .padding(.leading)
                             .frame(height: 44)
-                            .onTapGesture {
-                                self.isFocus = true
-                            }
                     }
                     
                     Divider()
@@ -125,9 +123,6 @@ struct SignInView: View {
                             .foregroundColor(.white)
                             .padding(.leading)
                             .frame(height: 44)
-                            .onTapGesture {
-                                self.isFocus = true
-                            }
                     }
                     
                 }
@@ -157,20 +152,22 @@ struct SignInView: View {
                         Alert(title: Text("Error Sign In"), message: Text(self.alertMessage), dismissButton: .default(Text("Ok")))
                     })
                     
-                    
-                    Text("Forgot Password?")
-                        .font(.footnote)
-                        .fontWeight(.regular)
-                        .foregroundColor(.white)
+                    Button(action: {self.showReset = true}, label: {
+                        Text("Forgot Password?")
+                            .font(.footnote)
+                            .fontWeight(.regular)
+                            .foregroundColor(.white)
+                    })
+                    .sheet(isPresented: $showReset, content: {
+                        PasswordResetView()
+                    })
                 }
             }
-            .animation(.easeInOut, value: self.isFocus)
             
             ActivityIndicator()
                 .animated(self.isLoading)
         }
         .onTapGesture {
-            self.isFocus = false
             self.hideKeyboard()
         }
     }

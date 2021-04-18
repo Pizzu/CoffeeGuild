@@ -20,10 +20,10 @@ struct CoffeesView: View {
     var body: some View {
         ZStack {
             content
+                .disabled(self.cartStore.showCartAlert)
             
             if self.cartStore.showCartAlert {
-                AddToCartAlert()
-                    .disabled(self.cartStore.showCartAlert)
+                CustomAlert(title: "Product", description: "Added to cart")
             }
         }
         .navigationBarTitle("Our Menu")

@@ -48,11 +48,11 @@ struct PasswordResetView: View {
                 .disabled(self.isResetUnsuccessful)
             
             if self.isResetSuccessful {
-                CustomAlert(title: "Password Reset", description: "An email has been sent you successfully.")
+                CustomAlert(title: "Reset Password", description: "An email has been sent you successfully.")
             }
             
             if self.isResetUnsuccessful {
-                CustomAlert(title: "Password Reset", description: "Something went wrong. Try Again.", icon: .xmark, color: Color.red)
+                CustomAlert(title: "Reset Password", description: "Something went wrong.", icon: .xmark, color: Color.red)
             }
         }
     }

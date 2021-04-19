@@ -14,6 +14,7 @@ struct HomeView: View {
     //Global State
     @EnvironmentObject var productStore: ProductStore
     @EnvironmentObject var cartStore: CartStore
+    @EnvironmentObject var userStore: UserStore
     
     //Local State
     @State private var showProfileView : Bool = false
@@ -73,6 +74,7 @@ struct HomeView: View {
             }
             .sheet(isPresented: self.$showProfileView, content: {
                ProfileView()
+                .environmentObject(self.userStore)
             })
             
             Button(action: {

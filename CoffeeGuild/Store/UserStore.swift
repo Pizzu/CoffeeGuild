@@ -105,6 +105,10 @@ class UserStore : ObservableObject {
         }
     }
     
+    func updateUser() {
+        
+    }
+    
     // Logout
     func logout() {
         do {

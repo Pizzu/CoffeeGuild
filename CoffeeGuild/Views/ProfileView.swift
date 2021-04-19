@@ -20,40 +20,35 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Important tasks")) {
-                    NavigationLink( destination: Text("Destination")) {
-                        Text("Row 1")
+                Section(header: Text("Account")) {
+                    NavigationLink( destination: UserDetailView()) {
+                        Text("Personal Info")
                     }
-                    Text("Row 2")
+                    Text("Orders")
                     Text("Row 3")
                 }
 
-                Section(header: Text("Other tasks")) {
+                Section(header: Text("Privacy")) {
                     Text("Row 1")
                     Text("Row 2")
                     Text("Row 3")
                 }
                 
-                Text("Logout")
-                    .bold()
-                    .onTapGesture {
-                        presentationMode.wrappedValue.dismiss()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.userStore.logout()
+                Section(header: Text("Disconect")) {
+                    Text("Logout")
+                        .bold()
+                        .onTapGesture {
+                            presentationMode.wrappedValue.dismiss()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.userStore.logout()
+                            }
+                            
                         }
-                        
-                    }
+                }
             }
             
             .listStyle(GroupedListStyle())
             .navigationBarTitle("Hello, \(self.userStore.currentUser?.username ?? "")")
-            .navigationBarItems(
-                trailing:
-                    Image(systemName: "xmark")
-                    .onTapGesture {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-            )
         }
     }
 }

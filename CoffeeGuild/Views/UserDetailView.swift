@@ -6,28 +6,42 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct UserDetailView: View {
     
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userStore : UserStore
     
-    @State private var image : Image = Image(systemName: "person.fill")
+    @State private var hasProfileImage : Bool = false
+    @State private var selectedImage : UIImage? = nil
     @State private var username : String = ""
     @State private var address : String = ""
     @State private var showCaptureImageView : Bool = false
+    @State private var showError : Bool = false
     
     private func setTextFields() {
         guard let currentUser = userStore.currentUser else {return}
         self.username = currentUser.username
         self.address = currentUser.address
         if currentUser.profileImage != "" {
-            self.image = Image(currentUser.profileImage)
+            self.hasProfileImage = true
         }
     }
     
     private func onUpdateInfoPressed() {
-        // Update user info
-        
+        do {
+            try self.userStore.updateUser(selectedImage: selectedImage, username: username, address: address) { error in
+                if error != nil {
+                    self.showError = true
+                } else {
+                    self.userStore.getCurrentUser()
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            }
+        } catch {
+            self.showError = true
+        }
     }
     
     var body : some View {
@@ -35,7 +49,7 @@ struct UserDetailView: View {
             content
             
             if self.showCaptureImageView {
-                CaptureImageView(isShown: $showCaptureImageView, image: $image)
+                CaptureImageView(isShown: $showCaptureImageView, image: $selectedImage)
                     .edgesIgnoringSafeArea(.all)
             }
         }
@@ -47,17 +61,43 @@ struct UserDetailView: View {
             
             VStack(spacing: 60) {
                 
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 180, height: 180)
-                    .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
-                    .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
-                    .clipShape(Circle())
-                    .onTapGesture {
-                        self.showCaptureImageView = true
+                if self.selectedImage == nil {
+                    if hasProfileImage && userStore.currentUser != nil {
+                        WebImage(url: URL(string: userStore.currentUser!.profileImage))
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 180, height: 180)
+                            .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
+                            .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
+                            .clipShape(Circle())
+                            .onTapGesture {
+                                self.showCaptureImageView = true
+                            }
+                    } else {
+                        Image(systemName: "person.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 180, height: 180)
+                            .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
+                            .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
+                            .clipShape(Circle())
+                            .onTapGesture {
+                                self.showCaptureImageView = true
+                            }
                     }
-                
+                } else {
+                    Image(uiImage: self.selectedImage!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 180, height: 180)
+                        .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
+                        .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
+                        .clipShape(Circle())
+                        .onTapGesture {
+                            self.showCaptureImageView = true
+                        }
+                }
+
                 VStack(spacing: 8) {
                     HStack {
                         Image(systemName: "person")
@@ -104,7 +144,7 @@ struct UserDetailView: View {
                 .padding(.horizontal)
                 
                 Button(action: {
-                    //
+                    self.onUpdateInfoPressed()
                 }) {
                     Text("Update")
                         .font(.headline)
@@ -116,6 +156,9 @@ struct UserDetailView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                         .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
                 }
+                .alert(isPresented: $showError, content: {
+                    Alert(title: Text("Update Error"), message: Text("There was an error updating your data. Try Again!"), dismissButton: .default(Text("Ok")))
+                })
             }
         }
         .onTapGesture {

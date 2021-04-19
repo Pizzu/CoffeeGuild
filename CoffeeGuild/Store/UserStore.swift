@@ -20,6 +20,7 @@ class UserStore : ObservableObject {
     
     private let auth : Auth = Auth.auth()
     private let db : Firestore = Firestore.firestore()
+    private let storage : Storage = Storage.storage()
     private var firebaseErrorHandling : FirebaseErrorHandling = FirebaseErrorHandling()
     
     
@@ -105,7 +106,58 @@ class UserStore : ObservableObject {
         }
     }
     
-    func updateUser() {
+    func updateUser(selectedImage : UIImage?, username: String, address: String, completion: @escaping (Error?) -> Void) throws {
+        guard !username.isEmpty || !address.isEmpty else {throw ValidationError.emptyValue}
+        guard let currentUser = self.currentUser else {return}
+        if selectedImage == nil {
+            // Just update username & address
+            db.collection("users").document(currentUser.id!).setData(["username": username,"address": address], merge: true) { (error) in
+                if error != nil {
+                    DispatchQueue.main.async {
+                        completion(error)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(nil)
+                    }
+                }
+            }
+        } else {
+            // Upload image + update username, address & profileImage string
+            guard let imageData = selectedImage?.jpegData(compressionQuality: 0.2) else {return}
+            let imageRef = storage.reference().child("/usersProfilePicture/\(currentUser.id!).jpg")
+            
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpg"
+            
+            imageRef.putData(imageData, metadata: metadata) { (metadata, error) in
+                if error != nil {
+                    DispatchQueue.main.async {
+                        completion(error)
+                    }
+                } else {
+                    imageRef.downloadURL { (url, error) in
+                        if error != nil {
+                            DispatchQueue.main.async {
+                                completion(error)
+                            }
+                        } else {
+                            self.db.collection("users").document(currentUser.id!).setData(["profileImage": url?.absoluteString ?? "", "username": username,"address": address], merge: true) { (error) in
+                                if error != nil {
+                                    DispatchQueue.main.async {
+                                        completion(error)
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                        completion(nil)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
     }
     

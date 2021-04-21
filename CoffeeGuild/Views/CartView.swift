@@ -12,6 +12,8 @@ struct CartView: View {
     //Global State
     @EnvironmentObject var cartStore: CartStore
     
+    @State private var isShowingCheckoutView = false
+    
     private func fetchProducts() {
         self.cartStore.fetchCartProducts()
     }
@@ -64,18 +66,23 @@ struct CartView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    
-                }) {
-                    Text("Check Out")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
-                        .padding(12)
-                        .frame(width: 150)
-                        .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
-                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                        .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
+                VStack {
+                    Button(action: {
+                        self.isShowingCheckoutView = true
+                    }) {
+                        Text("Check Out")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color(#colorLiteral(red: 0.8823529412, green: 0.7098039216, blue: 0.2705882353, alpha: 1)))
+                            .padding(12)
+                            .frame(width: 150)
+                            .background(Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)))
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
+                    }
+                    .sheet(isPresented: $isShowingCheckoutView, content: {
+                        CheckoutView()
+                    })
                 }
             }
             .padding(.horizontal)

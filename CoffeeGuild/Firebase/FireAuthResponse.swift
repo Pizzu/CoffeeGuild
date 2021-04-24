@@ -12,3 +12,8 @@ struct FireAuthResponse {
     let result : AuthDataResult?
     let errorMessage : String?
 }
+
+struct FunctionCompletionResponse {
+    let data : String?
+    let errorMessage : String?
+}

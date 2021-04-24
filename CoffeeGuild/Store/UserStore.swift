@@ -21,6 +21,7 @@ class UserStore : ObservableObject {
     private let auth : Auth = Auth.auth()
     private let db : Firestore = Firestore.firestore()
     private let storage : Storage = Storage.storage()
+    private let functions : Functions = Functions.functions()
     private var firebaseErrorHandling : FirebaseErrorHandling = FirebaseErrorHandling()
     
     
@@ -56,6 +57,7 @@ class UserStore : ObservableObject {
     //Sign up and create user
     func signupUser(username: String, email: String, password: String, address: String, completion: @escaping (FireAuthResponse) -> Void) throws {
         guard !username.isEmpty || !email.isEmpty || !password.isEmpty || !address.isEmpty else {throw ValidationError.emptyValue}
+        //Sign up User
         auth.createUser(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 let errorMessage = self.firebaseErrorHandling.handleFirebaseAuthError(error: error)
@@ -63,24 +65,50 @@ class UserStore : ObservableObject {
                     completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
                 }
             } else {
-                let errorMessage = self.createUserDocument(username: username, address: address, result: result)
-                if errorMessage != nil {
-                    DispatchQueue.main.async {
-                        completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
+                //Create Stripe Customer and get its ID back
+                self.createStripeUser(with: email) { (response) in
+                    if response.errorMessage != nil {
+                        DispatchQueue.main.async {
+                            completion(FireAuthResponse(result: nil, errorMessage: response.errorMessage))
+                        }
+                    } else {
+                        // If all good create user document in Firestore
+                        let errorMessage = self.createUserDocument(username: username, address: address, stripeID: response.data!, result: result)
+                        if errorMessage != nil {
+                            DispatchQueue.main.async {
+                                completion(FireAuthResponse(result: nil, errorMessage: errorMessage))
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                completion(FireAuthResponse(result: result, errorMessage: nil))
+                            }
+                        }
                     }
+                }
+                
+            }
+        }
+    }
+    
+    private func createStripeUser(with email: String, completion: @escaping (FunctionCompletionResponse) -> Void) {
+        functions.httpsCallable("createStripeCustomer").call(["email": email]) { (result, error) in
+            if error != nil {
+                completion(FunctionCompletionResponse(data: nil, errorMessage: error!.localizedDescription))
+            } else {
+                if let resultDict = result?.data as? [String : Any] {
+                    guard let stripeID = resultDict["customerId"] as? String else {return}
+                    completion(FunctionCompletionResponse(data: stripeID, errorMessage: nil))
                 } else {
-                    DispatchQueue.main.async {
-                        completion(FireAuthResponse(result: result, errorMessage: nil))
-                    }
+                    completion(FunctionCompletionResponse(data: nil, errorMessage: "Something went wrong"))
                 }
             }
         }
     }
     
-    private func createUserDocument(username: String, address: String, result: AuthDataResult?) -> String? {
+    private func createUserDocument(username: String, address: String, stripeID: String, result: AuthDataResult?) -> String? {
         if let user = result?.user {
             do {
-                let _ = try self.db.collection("users").document(user.uid).setData(from: User(id: user.uid, username: username, email: user.email ?? "", address: address, profileImage: ""))
+                let _ = try self.db.collection("users").document(user.uid).setData(from: User(id: user.uid, username: username, email: user.email ?? "", address: address, stripeID: stripeID, profileImage: ""))
             } catch {
                 return self.firebaseErrorHandling.handleFirebaseAuthError(error: error)
             }

@@ -13,6 +13,7 @@ struct User : Identifiable, Codable {
     var username : String
     var email : String
     var address : String
+    var stripeID : String
     var profileImage : String
 }
 

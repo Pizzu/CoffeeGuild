@@ -39,12 +39,10 @@ class LocationFetcher : NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        print("Hello")
         if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
             manager.startUpdatingLocation()
         } else {
             manager.stopUpdatingLocation()
         }
     }
-    
 }

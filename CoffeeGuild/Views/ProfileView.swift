@@ -24,7 +24,9 @@ struct ProfileView: View {
                     NavigationLink( destination: UserDetailView()) {
                         Text("Personal Info")
                     }
-                    Text("Orders")
+                    NavigationLink(destination: OrderView()) {
+                        Text("Orders")
+                    }
                     Text("Row 3")
                 }
 

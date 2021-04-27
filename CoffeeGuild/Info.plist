@@ -14,6 +14,8 @@
 	<string>$(SPACE_ID)</string>
 	<key>ACCESS_TOKEN</key>
 	<string>$(ACCESS_TOKEN)</string>
+	<key>STRIPE_PUBLIC_KEY</key>
+	<string>$(STRIPE_PUBLIC_KEY)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

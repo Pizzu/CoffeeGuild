@@ -94,6 +94,7 @@ struct HomeView: View {
             .sheet(isPresented: self.$showCartView, content: {
                 CartView()
                     .environmentObject(self.cartStore)
+                    .environmentObject(self.userStore)
             })
         }
     }

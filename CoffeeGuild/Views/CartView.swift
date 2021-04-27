@@ -6,13 +6,17 @@
 //
 
 import SwiftUI
+import Stripe
 
 struct CartView: View {
     
     //Global State
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var cartStore: CartStore
+    @EnvironmentObject var userStore : UserStore
     
-    @State private var isShowingCheckoutView = false
+    let paymentHandler = PaymentHandler()
+    
     
     private func fetchProducts() {
         self.cartStore.fetchCartProducts()
@@ -67,8 +71,16 @@ struct CartView: View {
                 Spacer()
                 
                 VStack {
+                    
                     Button(action: {
-                        self.isShowingCheckoutView = true
+                        self.paymentHandler.startPayment(for: self.userStore.currentUser, totalAmount: self.cartStore.totalPrice) { (success) in
+                            if success {
+                                print("Success")
+                                self.presentationMode.wrappedValue.dismiss()
+                            } else {
+                                print("Failed")
+                            }
+                        }
                     }) {
                         Text("Check Out")
                             .font(.headline)
@@ -80,13 +92,10 @@ struct CartView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                             .shadow(color: Color(#colorLiteral(red: 0.3568627451, green: 0.2039215686, blue: 0.1176470588, alpha: 1)).opacity(0.3), radius: 20, x: 0.0, y: 20)
                     }
-                    .sheet(isPresented: $isShowingCheckoutView, content: {
-                        CheckoutView()
-                    })
                 }
             }
             .padding(.horizontal)
-            .frame(height: 100)
+            .frame(height: 110)
             .background(Color("Gray Light"))
             .clipShape(RoundedRectangle(cornerRadius: 15.0, style: .continuous))
             .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0.0, y: -10)

@@ -73,10 +73,11 @@ struct CartView: View {
                 VStack {
                     
                     Button(action: {
-                        self.paymentHandler.startPayment(for: self.userStore.currentUser, totalAmount: self.cartStore.totalPrice) { (success) in
+                        self.paymentHandler.startPayment(for: self.userStore.currentUser, items: self.cartStore.cartItems, totalAmount: self.cartStore.totalPrice) { (success) in
                             if success {
                                 print("Success")
                                 self.presentationMode.wrappedValue.dismiss()
+                                self.cartStore.removeAllProductsFromCart()
                             } else {
                                 print("Failed")
                             }

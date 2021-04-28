@@ -16,6 +16,7 @@ class CartStore : ObservableObject {
     
     private let db : Firestore = Firestore.firestore()
     private let auth : Auth = Auth.auth()
+    private let functions: Functions = Functions.functions()
     private var ref : ListenerRegistration? = nil
         
     func fetchCartProducts() {
@@ -72,6 +73,14 @@ class CartStore : ObservableObject {
         cartRef.getDocument { (document, error) in
             if let document = document, document.exists {
                 cartRef.delete()
+            }
+        }
+    }
+    
+    func removeAllProductsFromCart() {
+        self.functions.httpsCallable("cleanCart").call(nil) { (result, error) in
+            if error != nil {
+                return
             }
         }
     }

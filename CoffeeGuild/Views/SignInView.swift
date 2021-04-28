@@ -35,10 +35,10 @@ struct SignInView: View {
                     self.showAlert = true
                 } else {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.userStore.getCurrentUser()
                         self.isSuccessful = false
                         self.email = ""
                         self.password = ""
-                        self.userStore.getCurrentUser()
                     }
                 }
             }
@@ -54,6 +54,7 @@ struct SignInView: View {
         ZStack {
             content
                 .disabled(isLoading)
+                .disabled(isSuccessful)
             
             if self.isSuccessful {
                 SuccessLog()

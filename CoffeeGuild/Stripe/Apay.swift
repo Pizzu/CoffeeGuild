@@ -21,17 +21,23 @@ class PaymentHandler: NSObject {
     
     var paymentSummaryItems = [PKPaymentSummaryItem]()
     var currentUser : User? = nil
+    var allItems : [[String : Any]] = []
     
     var completionHandler : PaymentCompletionHandler?
 
-    func startPayment(for user: User?, totalAmount: Float, completion: @escaping PaymentCompletionHandler) {
+    func startPayment(for user: User?, items: [Cart], totalAmount: Float, completion: @escaping PaymentCompletionHandler) {
         let merchantIdentifier = "merchant.com.CoffeeGuild"
         let paymentRequest = StripeAPI.paymentRequest(withMerchantIdentifier: merchantIdentifier, country: "US", currency: "USD")
         
         self.completionHandler = completion
         self.currentUser = user
+        self.allItems = items.map({ (cart) -> [String : Any] in
+            var dict : [String : Any] = [:]
+            dict["title"] = cart.title
+            dict["quantity"] = "\(cart.quantity)"
+            return dict
+        })
         let amount = PKPaymentSummaryItem(label: "Coffee Guild, Inc", amount: NSDecimalNumber(value: totalAmount))
-        print(amount.amount.floatValue)
         paymentSummaryItems = [amount]
         paymentRequest.paymentSummaryItems = paymentSummaryItems
         paymentRequest.merchantCapabilities = .capability3DS
@@ -48,11 +54,12 @@ class PaymentHandler: NSObject {
 */
 extension PaymentHandler: STPApplePayContextDelegate {
     func applePayContext(_ context: STPApplePayContext, didCreatePaymentMethod paymentMethod: STPPaymentMethod, paymentInformation: PKPayment, completion: @escaping STPIntentClientSecretCompletionBlock) {
-        print("Payment creation")
         if let currentUser = self.currentUser {
+            
             let data : [String : Any] = [
                 "totalAmount": paymentSummaryItems[0].amount.floatValue,
-                "stripeCustomerId": currentUser.stripeID
+                "stripeCustomerId": currentUser.stripeID,
+                "items": self.allItems
             ]
             self.functions.httpsCallable("createPaymentIntents").call(data) { (result, error) in
                 if error != nil {
@@ -68,7 +75,6 @@ extension PaymentHandler: STPApplePayContextDelegate {
                     completion(nil, nil)
                     return
                 }
-                print(clientSecret ?? "No secret")
                 completion(clientSecret, nil)
             }
         }
@@ -78,13 +84,7 @@ extension PaymentHandler: STPApplePayContextDelegate {
         if let completionHandler = self.completionHandler {
             switch status {
             case .success:
-                self.functions.httpsCallable("cleanCart").call(nil) { (result, error) in
-                    if error != nil {
-                        completionHandler(false)
-                        return
-                    }
-                    completionHandler(true)
-                }
+                completionHandler(true)
                 break
             case .error:
                 print("Error")

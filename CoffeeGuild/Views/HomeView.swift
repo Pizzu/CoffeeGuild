@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct HomeView: View {
     
@@ -65,7 +66,7 @@ struct HomeView: View {
             Button(action: {
                 self.showProfileView = true
             }) {
-                Image("Avatar1")
+                WebImage(url: URL(string: userStore.currentUser?.profileImage ?? ""))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 34, height: 34)

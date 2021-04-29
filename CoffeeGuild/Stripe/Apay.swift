@@ -84,15 +84,21 @@ extension PaymentHandler: STPApplePayContextDelegate {
         if let completionHandler = self.completionHandler {
             switch status {
             case .success:
-                completionHandler(true)
+                DispatchQueue.main.async {
+                    completionHandler(true)
+                }
                 break
             case .error:
                 print("Error")
-                completionHandler(false)
+                DispatchQueue.main.async {
+                    completionHandler(false)
+                }
                 break
             case .userCancellation:
                 print("Canceled")
-                completionHandler(false)
+                DispatchQueue.main.async {
+                    completionHandler(false)
+                }
                 break
             @unknown default:
                 fatalError()

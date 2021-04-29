@@ -78,8 +78,4 @@ class ProductStore : ObservableObject {
             }
         }
     }
-    
-    func detachListener() {
-        ref?.remove()
-    }
 }

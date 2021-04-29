@@ -14,19 +14,21 @@ struct OrderView: View {
     var body: some View {
         List {
             ForEach(self.orderStore.allOrders, id: \.self) { order in
-                VStack(alignment: .leading, spacing: 5.0) {
-                    Text(order.orderNumber)
-                    Text(order.title)
-                    Text(order.creationDate?.getFormattedDate(format: "dd-MM-yyyy") ?? "Date not available.")
-                        .font(.caption)
-                    VStack {
-                        ForEach(order.items, id: \.self) { item in
-                            Text(item["title"] ?? "")
-                        }
+                NavigationLink(destination: OrderDetailView(order: order)) {
+                    VStack(alignment: .leading, spacing: 5.0) {
+                        Text(order.orderNumber)
+                            .font(.footnote)
+                        Text(order.title)
+                            .font(.headline)
+                        Text(order.creationDate?.getFormattedDate(format: "dd-MM-yyyy") ?? "Date not available.")
+                            .font(.caption)
                     }
                 }
+                .isDetailLink(true)
+                .accentColor(.primary)
             }
         }
+        .navigationBarTitle("Your orders")
         .onAppear {
             self.orderStore.getAllOrders()
         }

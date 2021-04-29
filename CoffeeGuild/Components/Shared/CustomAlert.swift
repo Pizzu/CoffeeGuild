@@ -41,7 +41,8 @@ struct CustomAlert: View {
                 
                 Text(self.description)
                     .font(.headline)
-                    .bold()
+                    .fontWeight(.light)
+                    .multilineTextAlignment(.center)
             }
            
         }

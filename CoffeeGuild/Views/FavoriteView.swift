@@ -22,11 +22,6 @@ struct FavoriteView: View {
                 CustomAlert(title: "Product", description: "Added to cart")
             }
         }
-        .onDisappear {
-            self.productStore.detachListener()
-        }
-        
-       
     }
     
     var content : some View {

@@ -13,5 +13,6 @@ struct Order: Identifiable, Codable, Hashable {
     var title : String
     @ServerTimestamp var creationDate : Date?
     var orderNumber : String
+    var totalAmount: Float
     var items : [[String : String]]
 }

@@ -22,6 +22,22 @@ struct CartView: View {
         self.cartStore.fetchCartProducts()
     }
     
+    private func onOrderNowPressed() {
+        self.paymentHandler.startPayment(for: self.userStore.currentUser, items: self.cartStore.cartItems, totalAmount: self.cartStore.totalPrice) { (success) in
+            if success {
+                print("Success")
+                self.cartStore.showOrderCompleted = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.cartStore.showOrderCompleted = false
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.cartStore.removeAllProductsFromCart()
+                }
+            } else {
+                print("Failed")
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
             content
@@ -29,7 +45,12 @@ struct CartView: View {
             noItemsMessage
             
             checkout
+            
+            if self.cartStore.showOrderCompleted {
+                CustomAlert(title: "Order Created", description: "Check your email for more info")
+            }
         }
+        .disabled(self.cartStore.showOrderCompleted)
         .onAppear {
             self.fetchProducts()
         }
@@ -73,15 +94,7 @@ struct CartView: View {
                 VStack {
                     
                     Button(action: {
-                        self.paymentHandler.startPayment(for: self.userStore.currentUser, items: self.cartStore.cartItems, totalAmount: self.cartStore.totalPrice) { (success) in
-                            if success {
-                                print("Success")
-                                self.presentationMode.wrappedValue.dismiss()
-                                self.cartStore.removeAllProductsFromCart()
-                            } else {
-                                print("Failed")
-                            }
-                        }
+                        self.onOrderNowPressed()
                     }) {
                         Text("Check Out")
                             .font(.headline)
